@@ -102,8 +102,17 @@ export default function NotificationBell() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={() => setOpen(!open)}
+        <button
+        onClick={async () => {
+          setOpen(!open)
+          if (!open && count > 0) {
+            try {
+              await fetch("/api/messages/lire", { method: "POST" })
+              setCount(0)
+              setRecent([])
+            } catch {}
+          }
+        }}
         className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
         aria-label="Notifications"
       >

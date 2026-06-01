@@ -17,9 +17,10 @@ import {
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const STATUTS = ["nouveau", "contacté", "visité", "signé", "pas intéressé"]
+const STATUTS = ["nouveau", "lu", "contacté", "visité", "signé", "pas intéressé"]
 const STATUT_COLORS: Record<string, "danger" | "warning" | "info" | "success" | "secondary"> = {
   nouveau: "danger",
+  lu: "secondary",
   contacté: "warning",
   visité: "info",
   signé: "success",
@@ -126,7 +127,7 @@ export default function MessagesPage() {
 
   const filtered = messages.filter((m) => {
     if (filter === "nouveau") return m.statut === "nouveau"
-    if (filter === "en-cours") return ["contacté", "visité"].includes(m.statut)
+    if (filter === "en-cours") return ["lu", "contacté", "visité"].includes(m.statut)
     if (filter === "signé") return m.statut === "signé"
     return true
   }).filter((m) => {
