@@ -38,7 +38,6 @@ async function getBiensEnVedette() {
   return prisma.bien.findMany({
     where: { published: true, statut: "actif" },
     orderBy: { createdAt: "desc" },
-    take: 6,
     include: {
       promotions: {
         include: { promotion: true },
