@@ -6,6 +6,8 @@ export interface BienData {
   prix?: number | null
   prixNegociable: boolean
   prixSurDemande: boolean
+  prixPeriode?: string | null
+  prixTexte?: string | null
   devise: string
   ville?: string | null
   quartier?: string | null

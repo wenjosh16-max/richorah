@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { prisma } from "@/lib/prisma"
 import { formatPrix } from "@/lib/utils"
 import { Button } from "@/components/ui/button"

@@ -20,6 +20,8 @@ interface BienData {
   prix: number | null
   prixNegociable: boolean
   prixSurDemande: boolean
+  prixPeriode: string | null
+  prixTexte: string | null
   ville: string | null
   quartier: string | null
   superficie: number | null
@@ -47,6 +49,8 @@ export default function ModifierBienPage() {
     prix: "",
     prixNegociable: false,
     prixSurDemande: false,
+    prixPeriode: "",
+    prixTexte: "",
     ville: "",
     quartier: "",
     superficie: "",
@@ -73,6 +77,8 @@ export default function ModifierBienPage() {
           prix: data.prix?.toString() || "",
           prixNegociable: data.prixNegociable,
           prixSurDemande: data.prixSurDemande,
+          prixPeriode: data.prixPeriode || "",
+          prixTexte: data.prixTexte || "",
           ville: data.ville || "",
           quartier: data.quartier || "",
           superficie: data.superficie?.toString() || "",
@@ -102,6 +108,8 @@ export default function ModifierBienPage() {
         prix: form.prix ? parseFloat(form.prix) : undefined,
         prixNegociable: form.prixNegociable,
         prixSurDemande: form.prixSurDemande,
+        prixPeriode: form.prixPeriode || undefined,
+        prixTexte: form.prixTexte || undefined,
         ville: form.ville,
         quartier: form.quartier,
         superficie: form.superficie ? parseFloat(form.superficie) : undefined,
@@ -222,6 +230,24 @@ export default function ModifierBienPage() {
           <div>
             <Label>Prix (FCFA)</Label>
             <Input type="number" value={form.prix} onChange={(e) => update("prix", e.target.value)} />
+          </div>
+          <div>
+            <Label>Période du prix</Label>
+            <select
+              value={form.prixPeriode}
+              onChange={(e) => update("prixPeriode", e.target.value)}
+              className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF385C]"
+            >
+              <option value="">Vente (forfait)</option>
+              <option value="mois">Par mois</option>
+              <option value="jour">Par jour</option>
+              <option value="an">Par an</option>
+              <option value="nuit">Par nuit</option>
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Affichage personnalisé du prix (optionnel)</Label>
+            <Input value={form.prixTexte} onChange={(e) => update("prixTexte", e.target.value)} placeholder="Ex: 50 000 FCFA/mois" />
           </div>
           <div className="flex items-end gap-4 pb-2">
             <label className="flex items-center gap-2 text-sm">

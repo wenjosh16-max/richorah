@@ -15,6 +15,8 @@ model Bien {
   prix           Float?
   prixNegociable Boolean         @default(false)
   prixSurDemande Boolean         @default(false)
+  prixPeriode    String?         // "mois", "jour", "an", "nuit", null = vente
+  prixTexte      String?         // Texte libre pour affichage personnalisé (ex: "50 000 FCFA/mois")
   devise         String          @default("FCFA")
   ville          String?
   quartier       String?

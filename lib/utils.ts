@@ -5,9 +5,27 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrix(prix: number | null | undefined): string {
+export function formatPrix(prix: number | null | undefined, periode?: string | null): string {
   if (prix === null || prix === undefined) return ""
-  return prix.toLocaleString("fr-FR") + " FCFA"
+  const suffix: Record<string, string> = {
+    mois: "/mois",
+    jour: "/jour",
+    an: "/an",
+    nuit: "/nuit",
+  }
+  return prix.toLocaleString("fr-FR") + " FCFA" + (periode && suffix[periode] ? suffix[periode] : "")
+}
+
+export function formatBienPrix(bien: {
+  prix?: number | null
+  prixTexte?: string | null
+  prixPeriode?: string | null
+  prixSurDemande?: boolean
+}): string {
+  if (bien.prixTexte) return bien.prixTexte
+  if (bien.prixSurDemande) return "Prix sur demande"
+  if (bien.prix) return formatPrix(bien.prix, bien.prixPeriode)
+  return "Prix sur demande"
 }
 
 export function formatDate(date: Date | string): string {

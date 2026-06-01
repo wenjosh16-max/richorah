@@ -14,6 +14,8 @@ export async function updateBien(
     prix?: number
     prixNegociable?: boolean
     prixSurDemande?: boolean
+    prixPeriode?: string
+    prixTexte?: string
     ville?: string
     quartier?: string
     superficie?: number

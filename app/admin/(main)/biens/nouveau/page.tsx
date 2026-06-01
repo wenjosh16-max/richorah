@@ -25,6 +25,8 @@ export default function NouveauBienPage() {
     titre: "",
     type: "vente",
     prix: "",
+    prixPeriode: "",
+    prixTexte: "",
     ville: "",
     superficie: "",
     nbPieces: "",
@@ -85,6 +87,8 @@ export default function NouveauBienPage() {
         titre: form.titre,
         type: form.type,
         prix: form.prix ? parseFloat(form.prix) : undefined,
+        prixPeriode: form.prixPeriode || undefined,
+        prixTexte: form.prixTexte || undefined,
         ville: form.ville,
         quartier: form.quartier,
         superficie: form.superficie ? parseFloat(form.superficie) : undefined,
@@ -179,6 +183,24 @@ export default function NouveauBienPage() {
           <div>
             <Label>Prix (FCFA)</Label>
             <Input type="number" value={form.prix} onChange={(e) => update("prix", e.target.value)} placeholder="50 000 000" />
+          </div>
+          <div>
+            <Label>Période du prix</Label>
+            <select
+              value={form.prixPeriode}
+              onChange={(e) => update("prixPeriode", e.target.value)}
+              className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF385C]"
+            >
+              <option value="">Vente (forfait)</option>
+              <option value="mois">Par mois</option>
+              <option value="jour">Par jour</option>
+              <option value="an">Par an</option>
+              <option value="nuit">Par nuit</option>
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Affichage personnalisé du prix (optionnel)</Label>
+            <Input value={form.prixTexte} onChange={(e) => update("prixTexte", e.target.value)} placeholder="Ex: 50 000 FCFA/mois ou 1 000 000 FCFA/mois" />
           </div>
           <div>
             <Label>Ville</Label>

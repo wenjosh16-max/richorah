@@ -13,6 +13,8 @@ export async function createBien(data: {
   prix?: number
   prixNegociable?: boolean
   prixSurDemande?: boolean
+  prixPeriode?: string
+  prixTexte?: string
   ville?: string
   quartier?: string
   superficie?: number
@@ -37,6 +39,8 @@ export async function createBien(data: {
       prix: data.prix || null,
       prixNegociable: data.prixNegociable ?? false,
       prixSurDemande: data.prixSurDemande ?? false,
+      prixPeriode: data.prixPeriode || null,
+      prixTexte: data.prixTexte || null,
       ville: data.ville || null,
       quartier: data.quartier || null,
       superficie: data.superficie || null,

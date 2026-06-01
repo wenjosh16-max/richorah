@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
-import { formatPrix } from "@/lib/utils"
+import { formatPrix, formatBienPrix } from "@/lib/utils"
 import FavoriteButton from "@/components/public/FavoriteButton"
 import CardShareButton from "@/components/public/CardShareButton"
 import PromotionsCarousel from "@/components/public/PromotionsCarousel"
@@ -10,6 +10,8 @@ import HeroSection from "@/components/public/HeroSection"
 import NeighborhoodsSection from "@/components/public/NeighborhoodsSection"
 import LuxuryServicesSection from "@/components/public/LuxuryServicesSection"
 import type { BienData } from "@/types"
+export const dynamic = "force-dynamic"
+
 import {
   Building2,
   Users,
@@ -221,19 +223,19 @@ export default async function AccueilPage() {
                         {promo && prixPromo && bien.prix ? (
                           <div className="flex items-center gap-2">
                             <span className="text-xl font-bold text-[#1A1A1A]">
-                              {formatPrix(prixPromo)}
+                              {formatPrix(prixPromo, bien.prixPeriode)}
                             </span>
                             <span className="text-xs text-gray-400 line-through">
-                              {formatPrix(prixOriginal)}
+                              {formatPrix(prixOriginal, bien.prixPeriode)}
                             </span>
                           </div>
                         ) : prixOriginal ? (
                           <span className="text-xl font-bold text-[#1A1A1A]">
-                            {formatPrix(prixOriginal)}
+                            {formatPrix(prixOriginal, bien.prixPeriode)}
                           </span>
                         ) : (
                           <span className="text-sm font-medium text-gray-500">
-                            Prix sur demande
+                            {bien.prixSurDemande ? "Prix sur demande" : bien.prixTexte || "Prix sur demande"}
                           </span>
                         )}
                       </div>

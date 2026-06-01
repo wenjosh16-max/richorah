@@ -139,7 +139,7 @@ export default async function BiensPage({
                           </div>
                         </div>
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-xs font-semibold text-[#1A1A2E]">{bien.prix ? formatPrix(bien.prix) : "—"}</span>
+                          <span className="text-xs font-semibold text-[#1A1A2E]">{bien.prix ? formatPrix(bien.prix, bien.prixPeriode) : "—"}</span>
                           <span className="text-[10px] text-gray-400 capitalize">{bien.type}</span>
                           {bien.ville && <span className="text-[10px] text-gray-400">· {bien.ville}</span>}
                         </div>
@@ -204,7 +204,7 @@ export default async function BiensPage({
                           </div>
                         </td>
                         <td className="px-4 py-3 text-gray-600 capitalize">{bien.type}</td>
-                        <td className="px-4 py-3 font-medium text-[#1A1A2E]">{bien.prix ? formatPrix(bien.prix) : "—"}</td>
+                        <td className="px-4 py-3 font-medium text-[#1A1A2E]">{bien.prix ? formatPrix(bien.prix, bien.prixPeriode) : "—"}</td>
                         <td className="px-4 py-3 text-gray-600">{bien.ville || "—"}</td>
                         <td className="px-4 py-3">
                           <form action={changeStatut.bind(null, bien.id, cycleStatut(bien.statut))}>
