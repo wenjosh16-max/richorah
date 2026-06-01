@@ -1,0 +1,18 @@
+export const EQUIPEMENTS = [
+  "Climatisation",
+  "Parking",
+  "Piscine",
+  "Jardin",
+  "Terrasse",
+  "Cuisine équipée",
+  "Buanderie",
+  "Groupe électrogène",
+  "Vidéophone",
+  "Placard",
+  "Balcon",
+  "Ascenseur",
+  "Gardiènage",
+  "Citerne eau",
+  "Meublé",
+  "Vidéosurveillance",
+] as const

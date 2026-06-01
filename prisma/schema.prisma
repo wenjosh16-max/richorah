@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Bien {
+  id             String          @id @default(uuid())
+  titre          String
+  description    String?         @db.Text
+  type           String          @default("vente")
+  prix           Float?
+  prixNegociable Boolean         @default(false)
+  prixSurDemande Boolean         @default(false)
+  devise         String          @default("FCFA")
+  ville          String?
+  quartier       String?
+  superficie     Float?
+  nbPieces       Int?
+  etage          Int?
+  equipements    String[]
+  latitude       Float?
+  longitude      Float?
+  statut         String          @default("actif")
+  photos         String[]
+  slug           String          @unique
+  urlVisite360   String?
+  vues           Int             @default(0)
+  ordre          Int             @default(0)
+  published      Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  messages       Message[]
+  promotions     PromotionBien[]
+}
+
+model Promotion {
+  id          String          @id @default(uuid())
+  titre       String
+  description String?
+  reduction   Float
+  dateDebut   DateTime
+  dateFin     DateTime
+  active      Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  biens       PromotionBien[]
+}
+
+model PromotionBien {
+  promotionId String
+  bienId      String
+  promotion   Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+  bien        Bien      @relation(fields: [bienId], references: [id], onDelete: Cascade)
+
+  @@id([promotionId, bienId])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  nom       String
+  telephone String
+  email     String?
+  message   String   @db.Text
+  note      String?  @db.Text
+  bienId    String?
+  bien      Bien?    @relation(fields: [bienId], references: [id], onDelete: SetNull)
+  statut    String   @default("nouveau")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AlerteBien {
+  id            String   @id @default(uuid())
+  email         String
+  type          String?
+  ville         String?
+  budgetMax     Float?
+  superficieMin Float?
+  createdAt     DateTime @default(now())
+}
+
+model Contenu {
+  cle       String   @id
+  valeur    String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model Temoignage {
+  id        String   @id @default(uuid())
+  nom       String
+  texte     String   @db.Text
+  etoiles   Int      @default(5)
+  ordre     Int      @default(0)
+  actif     Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model JournalActivite {
+  id          String   @id @default(uuid())
+  action      String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
