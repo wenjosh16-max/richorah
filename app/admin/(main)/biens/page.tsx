@@ -120,12 +120,12 @@ export default async function BiensPage({
                 <tr className="bg-[#F8F7F4] text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   <th className="px-4 py-3 w-14"></th>
                   <th className="px-4 py-3">Titre</th>
-                  <th className="px-4 py-3">Type</th>
+                  <th className="px-4 py-3 hidden sm:table-cell">Type</th>
                   <th className="px-4 py-3">Prix</th>
-                  <th className="px-4 py-3">Ville</th>
+                  <th className="px-4 py-3 hidden md:table-cell">Ville</th>
                   <th className="px-4 py-3">Statut</th>
-                  <th className="px-4 py-3">Vues</th>
-                  <th className="px-4 py-3">Dernière MAJ</th>
+                  <th className="px-4 py-3 hidden lg:table-cell">Vues</th>
+                  <th className="px-4 py-3 hidden lg:table-cell">Dernière MAJ</th>
                   <th className="px-4 py-3 w-10"></th>
                   <th className="px-4 py-3 w-24"></th>
                 </tr>
@@ -166,13 +166,13 @@ export default async function BiensPage({
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-gray-600 capitalize">
+                      <td className="px-4 py-3 text-gray-600 capitalize hidden sm:table-cell">
                         {bien.type}
                       </td>
                       <td className="px-4 py-3 font-medium text-[#1A1A2E]">
                         {bien.prix ? formatPrix(bien.prix) : "—"}
                       </td>
-                      <td className="px-4 py-3 text-gray-600">
+                      <td className="px-4 py-3 text-gray-600 hidden md:table-cell">
                         {bien.ville || "—"}
                       </td>
                       <td className="px-4 py-3">
@@ -187,8 +187,8 @@ export default async function BiensPage({
                           </button>
                         </form>
                       </td>
-                      <td className="px-4 py-3 text-gray-500">{bien.vues}</td>
-                      <td className="px-4 py-3 text-gray-500 text-xs">
+                      <td className="px-4 py-3 text-gray-500 hidden lg:table-cell">{bien.vues}</td>
+                      <td className="px-4 py-3 text-gray-500 text-xs hidden lg:table-cell">
                         {formatDate(bien.updatedAt)}
                         {needsUpdate && (
                           <span className="ml-1.5 inline-block h-2 w-2 rounded-full bg-red-500" />

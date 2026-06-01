@@ -43,12 +43,13 @@ function LayoutContent({
                 {dateStr} · Lomé, Togo
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-3">
               <NotificationBell />
-              <Button asChild className="bg-primary hover:bg-[#E02D4F] gap-1.5 text-sm">
+              <Button asChild className="bg-primary hover:bg-[#E02D4F] gap-1 sm:gap-1.5 text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4">
                 <Link href="/admin/biens/nouveau">
                   <Plus className="h-4 w-4" />
-                  Ajouter un bien
+                  <span className="hidden sm:inline">Ajouter un bien</span>
+                  <span className="sm:hidden">Ajouter</span>
                 </Link>
               </Button>
             </div>
