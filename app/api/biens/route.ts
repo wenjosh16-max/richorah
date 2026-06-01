@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET() {
   const biens = await prisma.bien.findMany({
-    where: { published: true },
+    where: { statut: "actif" },
     select: {
       id: true,
       titre: true,

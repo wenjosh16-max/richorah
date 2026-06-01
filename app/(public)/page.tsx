@@ -36,7 +36,7 @@ const CATEGORIES = [
 
 async function getBiensEnVedette() {
   return prisma.bien.findMany({
-    where: { published: true, statut: "actif" },
+    where: { statut: "actif" },
     orderBy: { createdAt: "desc" },
     include: {
       promotions: {

@@ -31,7 +31,7 @@ import AnimatedSection from "./AnimatedSection"
 async function getBien(slug: string) {
   const now = new Date()
   return prisma.bien.findUnique({
-    where: { slug, published: true },
+    where: { slug, statut: "actif" },
     include: {
       promotions: {
         include: { promotion: true },
@@ -52,7 +52,6 @@ async function getBiensSimilaires(type: string, prix: number | null, id: string)
   const prixMax = prix ? prix * 1.3 : 999999999
   return prisma.bien.findMany({
     where: {
-      published: true,
       statut: "actif",
       type,
       id: { not: id },

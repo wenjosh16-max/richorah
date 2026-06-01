@@ -22,7 +22,7 @@ export default async function QuartiersPage() {
       orderBy: { ordre: "asc" },
     }),
     prisma.bien.findMany({
-      where: { published: true, statut: "actif" },
+      where: { statut: "actif" },
       select: {
         ville: true,
         quartier: true,

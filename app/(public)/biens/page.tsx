@@ -61,7 +61,7 @@ export default async function BiensPage({ searchParams }: BiensPageProps) {
   const affichage = params.affichage || "grille"
   const promotionId = params.promotionId
 
-  const where: Prisma.BienWhereInput = { published: true }
+  const where: Prisma.BienWhereInput = { statut: "actif" }
 
   if (type === "vente" || type === "location") {
     where.type = type

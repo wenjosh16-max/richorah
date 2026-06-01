@@ -10,7 +10,7 @@ export async function GET(
   const { slug } = await params
 
   const bien = await prisma.bien.findUnique({
-    where: { slug, published: true },
+    where: { slug, statut: "actif" },
   })
 
   if (!bien) {
