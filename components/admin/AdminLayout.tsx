@@ -27,12 +27,12 @@ function LayoutContent({
   })
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] overflow-x-hidden max-w-full">
+    <div className="min-h-screen bg-[#FAFAFA]">
       <AdminSidebar
         badgeUnreadMessages={badgeUnreadMessages}
         badgeOldProperties={badgeOldProperties}
       />
-      <div className="lg:pl-64 max-w-full">
+      <div className="lg:pl-64 min-w-0 w-full">
         <header className="sticky top-0 z-30 bg-white border-b border-gray-100">
           <div className="flex items-center justify-between h-16 px-4 lg:px-8 ml-12 lg:ml-0">
             <div>
