@@ -66,7 +66,7 @@ export default function FloatingMessageButton() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed bottom-24 left-6 z-40 bg-white rounded-2xl shadow-2xl border border-gray-100 w-80 overflow-hidden"
+            className="fixed bottom-24 left-4 sm:left-6 z-40 bg-white rounded-2xl shadow-2xl border border-gray-100 w-[calc(100vw-32px)] sm:w-80 overflow-hidden"
           >
             <div className="bg-[#FF385C] p-3 text-white flex items-center justify-between">
               <div>

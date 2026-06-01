@@ -41,7 +41,7 @@ export default function WhatsAppButton({ message }: { message?: string }) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed bottom-24 right-6 z-40 bg-white rounded-2xl shadow-2xl border border-gray-100 w-80 overflow-hidden"
+            className="fixed bottom-24 right-4 sm:right-6 z-40 bg-white rounded-2xl shadow-2xl border border-gray-100 w-[calc(100vw-32px)] sm:w-80 overflow-hidden"
           >
             <div className="bg-green-500 p-3 text-white">
               <p className="text-sm font-bold">Besoin d&apos;aide ?</p>
