@@ -4,11 +4,18 @@ import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import ImageUploader from "@/components/admin/ImageUploader"
 import { useToast } from "@/components/ui/use-toast"
 import { saveContenu } from "./actions"
-import { Save } from "lucide-react"
+import { Save, Upload } from "lucide-react"
 
 const SECTIONS = [
+  {
+    title: "Logo",
+    fields: [
+      { key: "logo_url", label: "Logo de l'agence", type: "image" },
+    ],
+  },
   {
     title: "Hero",
     fields: [
@@ -42,7 +49,7 @@ const SECTIONS = [
     title: "À propos",
     fields: [
       { key: "a_propos_texte", label: "Texte", type: "textarea" },
-      { key: "a_propos_photo", label: "URL Photo", type: "text" },
+      { key: "a_propos_photo", label: "Photo", type: "image" },
     ],
   },
 ]
@@ -109,20 +116,31 @@ export default function ContenusPage() {
           <h3 className="font-semibold text-[#1A1A2E] border-b pb-2">{section.title}</h3>
           {section.fields.map((field) => (
             <div key={field.key}>
-              <Label>{field.label}</Label>
-              {field.type === "textarea" ? (
-                <textarea
-                  value={values[field.key] || ""}
-                  onChange={(e) => updateValue(field.key, e.target.value)}
-                  rows={4}
-                  className="flex w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF385C] resize-y mt-1"
+              {field.type === "image" ? (
+                <ImageUploader
+                  currentImage={values[field.key] || null}
+                  onUploaded={(url) => updateValue(field.key, url)}
+                  label={field.label}
                 />
+              ) : field.type === "textarea" ? (
+                <div>
+                  <Label>{field.label}</Label>
+                  <textarea
+                    value={values[field.key] || ""}
+                    onChange={(e) => updateValue(field.key, e.target.value)}
+                    rows={4}
+                    className="flex w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF385C] resize-y mt-1"
+                  />
+                </div>
               ) : (
-                <Input
-                  value={values[field.key] || ""}
-                  onChange={(e) => updateValue(field.key, e.target.value)}
-                  className="mt-1"
-                />
+                <div>
+                  <Label>{field.label}</Label>
+                  <Input
+                    value={values[field.key] || ""}
+                    onChange={(e) => updateValue(field.key, e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
               )}
             </div>
           ))}

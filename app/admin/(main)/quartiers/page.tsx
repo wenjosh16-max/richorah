@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Trash2, Plus, ImageIcon, GripVertical } from "lucide-react"
+import ImageUploader from "@/components/admin/ImageUploader"
+import { Trash2, Plus, GripVertical, ImageIcon } from "lucide-react"
 
 interface Quartier {
   id: string
@@ -45,7 +46,11 @@ export default function AdminQuartiersPage() {
       const res = await fetch("/api/quartiers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom: nom.trim(), description: description.trim(), image: image.trim() }),
+        body: JSON.stringify({
+          nom: nom.trim(),
+          description: description.trim(),
+          image: image || null,
+        }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -81,23 +86,25 @@ export default function AdminQuartiersPage() {
           <Plus className="h-4 w-4 text-primary" /> Ajouter un quartier
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Input
-              placeholder="Nom du quartier *"
-              value={nom}
-              onChange={(e) => setNom(e.target.value)}
-              required
-              minLength={2}
-            />
-            <Input
-              placeholder="Description (ex: Quartier résidentiel calme)"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <Input
-              placeholder="URL photo (optionnelle)"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <Input
+                placeholder="Nom du quartier *"
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                required
+                minLength={2}
+              />
+              <Input
+                placeholder="Description (ex: Quartier résidentiel calme)"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            <ImageUploader
+              currentImage={image || null}
+              onUploaded={setImage}
+              label="Photo du quartier"
             />
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}

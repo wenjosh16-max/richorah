@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Phone, Mail, MapPin, Clock, Building2, ArrowUpRight } from "lucide-react"
 
-export default function Footer() {
+export default function Footer({ logoUrl }: { logoUrl?: string | null }) {
   return (
     <footer className="relative bg-[#0A0A0A] text-white">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FF385C]/30 to-transparent" />
@@ -10,13 +10,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF385C] to-[#E02D4F] flex items-center justify-center shadow-lg shadow-[#FF385C]/20">
-                <Building2 className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-serif text-xl font-bold tracking-tight">Richorah</div>
-                <div className="text-[10px] text-[#FF385C] tracking-[0.2em] uppercase font-medium">Immobilier</div>
-              </div>
+              {logoUrl ? (
+                <img src={logoUrl} alt="Richorah" className="h-10 w-auto max-w-[180px] object-contain" />
+              ) : (
+                <>
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF385C] to-[#E02D4F] flex items-center justify-center shadow-lg shadow-[#FF385C]/20">
+                    <Building2 className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-serif text-xl font-bold tracking-tight">Richorah</div>
+                    <div className="text-[10px] text-[#FF385C] tracking-[0.2em] uppercase font-medium">Immobilier</div>
+                  </div>
+                </>
+              )}
             </div>
             <p className="text-gray-500 text-sm leading-relaxed mb-6">
               Agence immobilière de confiance à Lomé, Togo. Nous vous accompagnons dans tous vos projets immobiliers avec professionnalisme et transparence.

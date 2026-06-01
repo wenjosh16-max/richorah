@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ]
 
-export default function Navbar() {
+export default function Navbar({ logoUrl }: { logoUrl?: string | null }) {
   const pathname = usePathname()
   const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
@@ -72,15 +72,25 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF385C] to-[#E02D4F] flex items-center justify-center shadow-md shadow-[#FF385C]/20 group-hover:shadow-lg group-hover:shadow-[#FF385C]/30 transition-all">
-              <Building2 className="h-4.5 w-4.5 text-white" />
-            </div>
-            <span className={`text-lg font-bold tracking-tight transition-colors ${scrolled || !isHome ? "text-[#222]" : "text-white"}`}>
-              richorah
-            </span>
-            <span className={`hidden sm:inline text-[10px] font-medium tracking-widest uppercase ml-1 transition-colors ${scrolled || !isHome ? "text-[#717171]" : "text-white/50"}`}>
-              Immobilier
-            </span>
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Richorah"
+                className="h-9 w-auto max-w-[160px] object-contain"
+              />
+            ) : (
+              <>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF385C] to-[#E02D4F] flex items-center justify-center shadow-md shadow-[#FF385C]/20 group-hover:shadow-lg group-hover:shadow-[#FF385C]/30 transition-all">
+                  <Building2 className="h-4.5 w-4.5 text-white" />
+                </div>
+                <span className={`text-lg font-bold tracking-tight transition-colors ${scrolled || !isHome ? "text-[#222]" : "text-white"}`}>
+                  richorah
+                </span>
+                <span className={`hidden sm:inline text-[10px] font-medium tracking-widest uppercase ml-1 transition-colors ${scrolled || !isHome ? "text-[#717171]" : "text-white/50"}`}>
+                  Immobilier
+                </span>
+              </>
+            )}
           </Link>
 
           <div className="hidden lg:flex items-center gap-8">
