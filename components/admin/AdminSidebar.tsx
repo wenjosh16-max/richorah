@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   Star,
+  MapPin,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
@@ -28,6 +29,7 @@ const navigation = [
   { name: "Promotions", href: "/admin/promotions", icon: Megaphone },
   { name: "Contenus", href: "/admin/contenus", icon: FileText },
   { name: "Témoignages", href: "/admin/temoignages", icon: Star },
+  { name: "Quartiers", href: "/admin/quartiers", icon: MapPin },
   { name: "Alertes", href: "/admin/alertes", icon: Bell },
   { name: "Activité", href: "/admin/activite", icon: Activity },
   { name: "Sauvegarde", href: "/admin/sauvegarde", icon: Download },

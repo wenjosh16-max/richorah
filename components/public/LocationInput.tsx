@@ -38,8 +38,7 @@ export default function LocationInput({
 
   useEffect(() => {
     if (!value.trim()) {
-      setFiltered([])
-      setIsOpen(false)
+      setFiltered(options)
       return
     }
     const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
@@ -48,7 +47,6 @@ export default function LocationInput({
       (o) => normalize(o.label).includes(q)
     )
     setFiltered(matches)
-    setIsOpen(matches.length > 0)
     setHighlightedIndex(-1)
   }, [value, options])
 
@@ -96,6 +94,8 @@ export default function LocationInput({
     onKeyDown?.(e)
   }
 
+  const showDropdown = isOpen && filtered.length > 0
+
   return (
     <div ref={containerRef} className="relative">
       <input
@@ -104,26 +104,20 @@ export default function LocationInput({
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => {
-          if (!value.trim()) return
-          const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-          const q = normalize(value)
-          setFiltered(options.filter((o) => normalize(o.label).includes(q)))
-          setIsOpen(true)
-        }}
+        onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={className}
         autoComplete="off"
       />
       <AnimatePresence>
-        {isOpen && filtered.length > 0 && (
+        {showDropdown && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden"
+            className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto"
           >
             {filtered.map((option, index) => (
               <button
@@ -139,6 +133,9 @@ export default function LocationInput({
               >
                 <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-400" />
                 <span>{option.label}</span>
+                {option.type === "quartier" && (
+                  <span className="ml-auto text-[10px] text-gray-400 uppercase tracking-wider">Quartier</span>
+                )}
               </button>
             ))}
           </motion.div>

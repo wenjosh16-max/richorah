@@ -8,12 +8,21 @@ export interface LieuOption {
 }
 
 export async function getLieuxDisponibles(): Promise<LieuOption[]> {
+  const lieuxMap = new Map<string, LieuOption>()
+
+  const quartiers = await prisma.quartier.findMany({
+    where: { published: true },
+    orderBy: { ordre: "asc" },
+  })
+
+  for (const q of quartiers) {
+    lieuxMap.set(`quartier:${q.nom}`, { value: q.nom, label: q.nom, type: "quartier" })
+  }
+
   const biens = await prisma.bien.findMany({
     where: { published: true },
     select: { ville: true, quartier: true },
   })
-
-  const lieuxMap = new Map<string, LieuOption>()
 
   for (const b of biens) {
     if (b.ville) {
