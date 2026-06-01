@@ -187,15 +187,15 @@ export default function MessagesPage() {
                         setNote(msg.note || "")
                       }
                     }}
-                    className={`flex items-center gap-4 px-4 py-3 cursor-pointer transition-colors hover:bg-[#F8F7F4] ${
+                    className={`flex items-start sm:items-center gap-3 sm:gap-4 px-4 py-3 cursor-pointer transition-colors hover:bg-[#F8F7F4] ${
                       isStale ? "bg-red-50 border-l-4 border-l-red-500" : ""
                     } ${isExpanded ? "bg-[#F8F7F4]" : ""}`}
                   >
-                    <div className="min-w-0 flex-1 overflow-hidden">
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#1A1A2E] truncate">{msg.nom}</span>
                         {isStale && (
-                          <span className="text-[10px] text-red-600 font-medium bg-red-100 px-1.5 py-0.5 rounded">Sans réponse</span>
+                          <span className="text-[10px] text-red-600 font-medium bg-red-100 px-1.5 py-0.5 rounded whitespace-nowrap">Sans réponse</span>
                         )}
                       </div>
                       <p className="text-sm text-gray-500 truncate">
@@ -205,13 +205,15 @@ export default function MessagesPage() {
                     <div className="hidden sm:block text-sm text-gray-500 min-w-[120px]">
                       {msg.bien?.titre || "—"}
                     </div>
-                    <div className="text-xs text-gray-400 min-w-[80px]">
-                      {new Date(msg.createdAt).toLocaleDateString("fr-FR")}
+                    <div className="flex items-center gap-3 shrink-0 sm:relative sm:flex-nowrap flex-wrap sm:flex-nowrap">
+                      <div className="text-xs text-gray-400">
+                        {new Date(msg.createdAt).toLocaleDateString("fr-FR")}
+                      </div>
+                      <Badge variant={STATUT_COLORS[msg.statut] || "secondary"}>
+                        {msg.statut}
+                      </Badge>
+                      <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                     </div>
-                    <Badge variant={STATUT_COLORS[msg.statut] || "secondary"}>
-                      {msg.statut}
-                    </Badge>
-                    <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                   </div>
 
                   <AnimatePresence>

@@ -214,14 +214,14 @@ export default function PromotionsPage() {
           return (
             <div
               key={p.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center justify-between gap-4"
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4"
             >
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-semibold text-[#1A1A2E]">{p.titre}</span>
                   <Badge variant={status.variant}>{status.label}</Badge>
                   {status.label === "Active" && remaining > 0 && (
-                    <span className="flex items-center gap-1 text-xs text-gray-500">
+                    <span className="flex items-center gap-1 text-xs text-gray-500 whitespace-nowrap">
                       <Clock className="h-3 w-3" />
                       Expire dans {remaining} jour{remaining > 1 ? "s" : ""}
                     </span>
@@ -230,10 +230,10 @@ export default function PromotionsPage() {
                 {p.description && (
                   <p className="text-sm text-gray-500 mt-1">{p.description}</p>
                 )}
-                <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
-                  <span>-{p.reduction}%</span>
-                  <span>{formatDate(p.dateDebut)} → {formatDate(p.dateFin)}</span>
-                  <span>{p.biens.length} bien{p.biens.length > 1 ? "s" : ""}</span>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-sm text-gray-500">
+                  <span className="whitespace-nowrap">-{p.reduction}%</span>
+                  <span className="whitespace-nowrap">{formatDate(p.dateDebut)} → {formatDate(p.dateFin)}</span>
+                  <span className="whitespace-nowrap">{p.biens.length} bien{p.biens.length > 1 ? "s" : ""}</span>
                 </div>
                 {p.biens.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
@@ -245,7 +245,7 @@ export default function PromotionsPage() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                 <Button
                   variant="ghost"
                   size="sm"

@@ -150,7 +150,7 @@ export default function TemoignagesPage() {
                   placeholder="Excellent service..."
                 />
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                 <div>
                   <Label>Étoiles</Label>
                   <div className="flex items-center gap-1 mt-1">
@@ -187,10 +187,10 @@ export default function TemoignagesPage() {
         {sorted.map((t) => (
           <div
             key={t.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-start justify-between gap-4"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4"
           >
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span className="font-semibold text-[#1A1A2E]">{t.nom}</span>
                 <Badge variant={t.actif ? "success" : "secondary"}>
                   {t.actif ? "Affiché" : "Masqué"}
@@ -199,7 +199,7 @@ export default function TemoignagesPage() {
               <p className="text-sm text-gray-500 mt-1 italic line-clamp-2">
                 &ldquo;{t.texte}&rdquo;
               </p>
-              <div className="flex items-center gap-3 mt-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
                 <div className="flex items-center gap-0.5">
                   {Array.from({ length: t.etoiles }).map((_, i) => (
                     <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
@@ -208,7 +208,7 @@ export default function TemoignagesPage() {
                 <span className="text-xs text-gray-400">Ordre : {t.ordre}</span>
               </div>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
+            <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
               <Button variant="ghost" size="sm" onClick={() => handleToggle(t.id, t.actif)}>
                 {t.actif ? <EyeOff className="h-4 w-4 text-gray-400" /> : <Eye className="h-4 w-4 text-green-500" />}
               </Button>
