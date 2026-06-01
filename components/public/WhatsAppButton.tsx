@@ -143,7 +143,7 @@ export default function WhatsAppButton({ message }: { message?: string }) {
         )}
       </AnimatePresence>
 
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3">
+      <div className="fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col items-center gap-3">
         <button
           onClick={() => setOpen(!open)}
           className="flex items-center justify-center w-14 h-14 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-all active:scale-95"

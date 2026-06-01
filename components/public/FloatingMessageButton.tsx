@@ -166,7 +166,7 @@ export default function FloatingMessageButton() {
         )}
       </AnimatePresence>
 
-      <div className="fixed bottom-6 left-6 z-40">
+      <div className="fixed bottom-6 left-4 sm:left-6 z-40">
         <button
           onClick={() => setOpen(!open)}
           className="flex items-center justify-center w-14 h-14 bg-[#FF385C] text-white rounded-full shadow-lg hover:bg-[#E02D4F] transition-all active:scale-95"

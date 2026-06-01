@@ -66,7 +66,7 @@ export default function HeroSection({ contenu }: HeroSectionProps) {
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <span className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium">
+          <span className="inline-block px-3 sm:px-4 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-[10px] sm:text-xs tracking-widest uppercase font-medium">
             Agence immobilière de prestige
           </span>
         </motion.div>
@@ -75,7 +75,7 @@ export default function HeroSection({ contenu }: HeroSectionProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight tracking-tight"
+          className="font-serif text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight"
         >
           {contenu["slogan_hero"] || "Votre patrimoine, notre passion"}
         </motion.h1>
@@ -84,7 +84,7 @@ export default function HeroSection({ contenu }: HeroSectionProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg sm:text-xl text-white/70 mb-10 max-w-2xl mx-auto font-light leading-relaxed"
+          className="text-sm min-[400px]:text-lg sm:text-xl text-white/70 mb-8 sm:mb-10 max-w-2xl mx-auto font-light leading-relaxed"
         >
           {contenu["sous_slogan_hero"] || "Agence immobilière de confiance à Lomé, Togo"}
         </motion.p>
@@ -94,9 +94,9 @@ export default function HeroSection({ contenu }: HeroSectionProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35 }}
           onSubmit={handleSearch}
-          className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 sm:p-6 max-w-3xl mx-auto shadow-2xl"
+          className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-6 max-w-3xl mx-auto shadow-2xl"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-3">
             <div className="relative">
               <select
                 value={type}
@@ -148,7 +148,7 @@ export default function HeroSection({ contenu }: HeroSectionProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-6 text-white/60 text-sm"
+          className="mt-6 sm:mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-white/60 text-xs sm:text-sm"
         >
           <span className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#FF385C] rounded-full" /> Vente

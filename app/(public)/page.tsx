@@ -121,9 +121,9 @@ export default async function AccueilPage() {
         }))}
       />
 
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-4">
             <div>
               <span className="text-[#FF385C] text-xs tracking-[0.2em] uppercase font-medium">Sélection</span>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-4xl font-bold text-[#1A1A1A] mt-1 leading-tight">
@@ -145,7 +145,7 @@ export default async function AccueilPage() {
           </div>
 
           {biens.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {biens.map((bien) => {
                 const promo = bien.promotions[0]?.promotion
                 const prixOriginal = bien.prix
@@ -285,7 +285,7 @@ export default async function AccueilPage() {
 
       <LuxuryServicesSection />
 
-      <section className="py-16 lg:py-20 bg-[#FAFAFA]">
+      <section className="py-12 sm:py-16 lg:py-20 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-[#FF385C]/5 to-transparent rounded-3xl" />
@@ -296,11 +296,11 @@ export default async function AccueilPage() {
                 { value: contenus["chiffres_annees"] || "10+", label: "Années d'expérience" },
                 { value: contenus["chiffres_quartiers"] || "20+", label: "Quartiers couverts" },
               ].map((stat, i) => (
-                <div key={i} className="bg-white p-8 text-center">
-                  <div className="font-serif text-4xl lg:text-5xl font-bold text-[#FF385C] mb-1">
+                <div key={i} className="bg-white p-4 sm:p-8 text-center">
+                  <div className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold text-[#FF385C] mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
+                  <div className="text-xs sm:text-sm text-gray-500 font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -308,9 +308,9 @@ export default async function AccueilPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <span className="text-[#FF385C] text-xs tracking-[0.2em] uppercase font-medium">Pourquoi nous</span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1A1A] mt-2">
               Pourquoi choisir Richorah ?
@@ -320,7 +320,7 @@ export default async function AccueilPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {[
               {
                 icon: Shield,
@@ -358,9 +358,9 @@ export default async function AccueilPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 bg-[#FAFAFA]">
+      <section className="py-12 sm:py-16 lg:py-20 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <span className="text-[#FF385C] text-xs tracking-[0.2em] uppercase font-medium">Témoignages</span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1A1A] mt-2">
               Ce que disent nos clients
@@ -405,7 +405,7 @@ export default async function AccueilPage() {
         </div>
       </section>
 
-      <section className="relative py-24 lg:py-28 overflow-hidden">
+      <section className="relative py-16 sm:py-24 lg:py-28 overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80"
@@ -418,25 +418,25 @@ export default async function AccueilPage() {
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-          <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-6">
+          <div className="inline-block px-3 sm:px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-4 sm:mb-6">
             Contact
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+          <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
             Prêt à trouver votre bien idéal ?
           </h2>
-          <p className="text-white/60 text-sm sm:text-base mb-8 max-w-lg mx-auto">
+          <p className="text-white/60 text-xs sm:text-base mb-6 sm:mb-8 max-w-lg mx-auto">
             Contactez-nous dès maintenant pour un accompagnement personnalisé
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a href="https://wa.me/22870628696" target="_blank" rel="noopener noreferrer">
-              <Button className="bg-[#FF385C] hover:bg-[#E02D4F] gap-2 w-full sm:w-auto rounded-xl h-12 px-8 shadow-lg shadow-[#FF385C]/25 text-base">
+              <Button className="bg-[#FF385C] hover:bg-[#E02D4F] gap-2 w-full sm:w-auto rounded-xl h-11 sm:h-12 px-6 sm:px-8 shadow-lg shadow-[#FF385C]/25 text-sm sm:text-base">
                 <Phone className="h-4 w-4" /> WhatsApp : 70 62 86 96
               </Button>
             </a>
             <a href="tel:+22870628696">
               <Button
                 variant="outline"
-                className="gap-2 w-full sm:w-auto border-white/20 text-white hover:bg-white/10 rounded-xl h-12 px-8 text-base"
+                className="gap-2 w-full sm:w-auto border-white/20 text-white hover:bg-white/10 rounded-xl h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base"
               >
                 <Phone className="h-4 w-4" /> Appeler : 70 62 86 96
               </Button>

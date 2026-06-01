@@ -20,7 +20,7 @@ export default async function NeighborhoodsSection() {
   })
 
   return (
-    <section className="py-16 lg:py-20 bg-[#FAFAFA]">
+    <section className="py-12 sm:py-16 lg:py-20 bg-[#FAFAFA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
           <div>
