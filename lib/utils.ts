@@ -37,7 +37,8 @@ export function genererTextePartage(bien: {
   slug: string
   photoUrl?: string | null
 }): string {
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/biens/${bien.slug}`
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://richorah.vercel.app"
+  const url = `${baseUrl}/biens/${bien.slug}`
   const lines = [
     `🏠 ${bien.titre}`,
     `📍 ${[bien.ville, bien.quartier].filter(Boolean).join(", ")}`,
@@ -55,7 +56,8 @@ export function genererTextePartage(bien: {
 }
 
 export function genererMessageWhatsApp(bien: { titre: string; slug: string }): string {
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/biens/${bien.slug}`
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://richorah.vercel.app"
+  const url = `${baseUrl}/biens/${bien.slug}`
   return encodeURIComponent(
     `Bonjour, je suis intéressé par le bien "${bien.titre}".\n\n${url}\n\nMerci de me contacter.`
   )

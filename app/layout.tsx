@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import PwaRegister from "@/components/PwaRegister"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://richorah.vercel.app"),
   title: {
     default: "Richorah Immobilier | Agence immobilière à Lomé, Togo",
     template: "%s | Richorah Immobilier",

@@ -234,66 +234,80 @@ async function main() {
     },
   ]
 
-  await prisma.temoignage.deleteMany()
-  for (const t of temoignages) {
-    await prisma.temoignage.create({ data: t })
+  const existingTemoignages = await prisma.temoignage.count()
+  if (existingTemoignages === 0) {
+    for (const t of temoignages) {
+      await prisma.temoignage.create({ data: t })
+    }
+    console.log(`${temoignages.length} témoignages created`)
+  } else {
+    console.log(`Témoignages skipped (${existingTemoignages} already exist)`)
   }
 
   console.log(`${temoignages.length} témoignages created`)
 
-  await prisma.promotionBien.deleteMany()
-  await prisma.promotion.deleteMany()
-  await prisma.journalActivite.deleteMany()
-  await prisma.promotion.create({
-    data: {
-      titre: "Promotion été 2026",
-      description: "Profitez de -10% sur tous nos biens en vente jusqu'à fin août",
-      reduction: 10,
-      dateDebut: new Date("2026-06-01"),
-      dateFin: new Date("2026-08-31"),
-      active: true,
-      biens: {
-        create: [{ bienId: (await prisma.bien.findUnique({ where: { slug: "villa-moderne-tokoin" } }))!.id }],
+  const existingPromos = await prisma.promotion.count()
+  if (existingPromos === 0) {
+    await prisma.promotion.create({
+      data: {
+        titre: "Promotion été 2026",
+        description: "Profitez de -10% sur tous nos biens en vente jusqu'à fin août",
+        reduction: 10,
+        dateDebut: new Date("2026-06-01"),
+        dateFin: new Date("2026-08-31"),
+        active: true,
+        biens: {
+          create: [{ bienId: (await prisma.bien.findUnique({ where: { slug: "villa-moderne-tokoin" } }))!.id }],
+        },
       },
-    },
-  })
+    })
 
-  console.log("1 promotion created")
+    console.log("1 promotion created")
+  } else {
+    console.log(`Promotions skipped (${existingPromos} already exist)`)
+  }
 
-  await prisma.message.deleteMany()
-  const premierBien = await prisma.bien.findFirst({ orderBy: { createdAt: "asc" } })
+  const existingMessages = await prisma.message.count()
+  if (existingMessages === 0) {
+    const premierBien = await prisma.bien.findFirst({ orderBy: { createdAt: "asc" } })
 
-  await prisma.message.createMany({
-    data: [
-      {
-        nom: "Jean T.",
-        telephone: "90 12 34 56",
-        email: "jean.t@email.com",
-        message: "Bonjour, je suis intéressé par la villa moderne à Tokoin. Pouvez-vous me contacter pour une visite ?",
-        bienId: premierBien?.id || undefined,
-        statut: "nouveau",
-      },
-      {
-        nom: "Aminata S.",
-        telephone: "70 98 76 54",
-        message: "Je recherche un studio meublé à Nyékonakpoé. Est-ce que le studio affiché est toujours disponible ?",
-        bienId: (await prisma.bien.findUnique({ where: { slug: "studio-meuble-nyekonakpoe" } }))?.id || undefined,
-        statut: "contacté",
-      },
-    ],
-  })
+    await prisma.message.createMany({
+      data: [
+        {
+          nom: "Jean T.",
+          telephone: "90 12 34 56",
+          email: "jean.t@email.com",
+          message: "Bonjour, je suis intéressé par la villa moderne à Tokoin. Pouvez-vous me contacter pour une visite ?",
+          bienId: premierBien?.id || undefined,
+          statut: "nouveau",
+        },
+        {
+          nom: "Aminata S.",
+          telephone: "70 98 76 54",
+          message: "Je recherche un studio meublé à Nyékonakpoé. Est-ce que le studio affiché est toujours disponible ?",
+          bienId: (await prisma.bien.findUnique({ where: { slug: "studio-meuble-nyekonakpoe" } }))?.id || undefined,
+          statut: "contacté",
+        },
+      ],
+    })
 
-  console.log("2 messages created")
+    console.log("2 messages created")
+  } else {
+    console.log(`Messages skipped (${existingMessages} already exist)`)
+  }
 
-  await prisma.journalActivite.createMany({
-    data: [
-      { action: "seed", description: "Initialisation de la base de données" },
-      { action: "creation", description: "Création de 6 biens exemples" },
-      { action: "creation", description: "Création de la promotion été 2026" },
-    ],
-  })
+  const existingJournal = await prisma.journalActivite.count()
+  if (existingJournal === 0) {
+    await prisma.journalActivite.createMany({
+      data: [
+        { action: "seed", description: "Initialisation de la base de données" },
+        { action: "creation", description: "Création de 6 biens exemples" },
+        { action: "creation", description: "Création de la promotion été 2026" },
+      ],
+    })
 
-  console.log("Journal entries created")
+    console.log("Journal entries created")
+  }
   console.log("Seed completed successfully!")
 }
 
