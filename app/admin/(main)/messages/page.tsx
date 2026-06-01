@@ -191,9 +191,9 @@ export default function MessagesPage() {
                       isStale ? "bg-red-50 border-l-4 border-l-red-500" : ""
                     } ${isExpanded ? "bg-[#F8F7F4]" : ""}`}
                   >
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 overflow-hidden">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-[#1A1A2E]">{msg.nom}</span>
+                        <span className="font-medium text-[#1A1A2E] truncate">{msg.nom}</span>
                         {isStale && (
                           <span className="text-[10px] text-red-600 font-medium bg-red-100 px-1.5 py-0.5 rounded">Sans réponse</span>
                         )}

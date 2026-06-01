@@ -66,7 +66,30 @@ export default function AlertesPage() {
         <div className="p-12 text-center text-gray-400">Aucune alerte souscrite.</div>
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: cards */}
+          <div className="divide-y divide-gray-100 md:hidden">
+            {alertes.map((a) => (
+              <div key={a.id} className="p-4 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-medium text-[#1A1A2E] text-sm truncate">{a.email}</span>
+                  <Badge variant={a.type === "vente" ? "default" : "info"} className="text-[10px] shrink-0">{a.type || "Tous"}</Badge>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                  <span>📍 {a.ville || "Toutes"}</span>
+                  {a.budgetMax && <span>💰 {a.budgetMax.toLocaleString("fr-FR")} FCFA</span>}
+                  {a.superficieMin && <span>📐 {a.superficieMin} m²</span>}
+                  <span>📅 {formatDate(a.createdAt)}</span>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => handleSendEmail(a)} disabled={sendingId === a.id} className="w-full mt-1">
+                  <Mail className="h-4 w-4 mr-1" />
+                  {sendingId === a.id ? "..." : "Envoyer un email"}
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-[#F8F7F4] text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -84,29 +107,15 @@ export default function AlertesPage() {
                   <tr key={a.id} className="hover:bg-[#F8F7F4] transition-colors">
                     <td className="px-4 py-3 font-medium text-[#1A1A2E]">{a.email}</td>
                     <td className="px-4 py-3">
-                      <Badge variant={a.type === "vente" ? "default" : "info"}>
-                        {a.type || "Tous"}
-                      </Badge>
+                      <Badge variant={a.type === "vente" ? "default" : "info"}>{a.type || "Tous"}</Badge>
                     </td>
                     <td className="px-4 py-3 text-gray-600">{a.ville || "Toutes"}</td>
-                    <td className="px-4 py-3 text-gray-600">
-                      {a.budgetMax ? `${a.budgetMax.toLocaleString("fr-FR")} FCFA` : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-gray-600">
-                      {a.superficieMin ? `${a.superficieMin} m²` : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">
-                      {formatDate(a.createdAt)}
-                    </td>
+                    <td className="px-4 py-3 text-gray-600">{a.budgetMax ? `${a.budgetMax.toLocaleString("fr-FR")} FCFA` : "—"}</td>
+                    <td className="px-4 py-3 text-gray-600">{a.superficieMin ? `${a.superficieMin} m²` : "—"}</td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">{formatDate(a.createdAt)}</td>
                     <td className="px-4 py-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleSendEmail(a)}
-                        disabled={sendingId === a.id}
-                      >
-                        <Mail className="h-4 w-4 mr-1" />
-                        {sendingId === a.id ? "..." : "Email"}
+                      <Button variant="outline" size="sm" onClick={() => handleSendEmail(a)} disabled={sendingId === a.id}>
+                        <Mail className="h-4 w-4 mr-1" />{sendingId === a.id ? "..." : "Email"}
                       </Button>
                     </td>
                   </tr>

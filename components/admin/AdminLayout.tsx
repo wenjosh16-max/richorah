@@ -55,7 +55,7 @@ function LayoutContent({
             </div>
           </div>
         </header>
-        <main className="p-4 lg:p-8">{children}</main>
+        <main className="p-4 lg:p-8 overflow-x-hidden">{children}</main>
       </div>
     </div>
   )
