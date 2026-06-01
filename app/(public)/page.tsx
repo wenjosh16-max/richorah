@@ -7,6 +7,8 @@ import FavoriteButton from "@/components/public/FavoriteButton"
 import CardShareButton from "@/components/public/CardShareButton"
 import PromotionsCarousel from "@/components/public/PromotionsCarousel"
 import HeroSection from "@/components/public/HeroSection"
+import NeighborhoodsSection from "@/components/public/NeighborhoodsSection"
+import LuxuryServicesSection from "@/components/public/LuxuryServicesSection"
 import type { BienData } from "@/types"
 import {
   Building2,
@@ -21,7 +23,6 @@ import {
   Phone,
   SlidersHorizontal,
   Sparkles,
-  ChevronRight,
 } from "lucide-react"
 
 const CATEGORIES = [
@@ -129,7 +130,7 @@ export default async function AccueilPage() {
                 Biens en vedette
               </h2>
               <p className="text-gray-500 mt-2 max-w-md">
-                Découvrez nos meilleures offres du moment, sélectionnées avec soin pour vous.
+                Découvrez nos meilleures offres du moment, sélectionnées avec soin
               </p>
             </div>
             <Link
@@ -280,6 +281,10 @@ export default async function AccueilPage() {
         </div>
       </section>
 
+      <NeighborhoodsSection />
+
+      <LuxuryServicesSection />
+
       <section className="py-16 lg:py-20 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
@@ -363,49 +368,59 @@ export default async function AccueilPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {temoignages.map((t) => (
-              <div
-                key={t.id}
-                className="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
-              >
-                <div className="flex mb-4">
-                  {Array.from({ length: t.etoiles }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-5 italic">
-                  &ldquo;{t.texte}&rdquo;
-                </p>
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF385C]/20 to-[#E02D4F]/20 flex items-center justify-center">
-                    <span className="text-sm font-bold text-[#FF385C]">
-                      {t.nom.charAt(0)}
-                    </span>
+            {temoignages.length > 0 ? (
+              temoignages.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+                >
+                  <div className="flex mb-4">
+                    {Array.from({ length: t.etoiles }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
-                  <div>
-                    <p className="font-semibold text-[#1A1A1A] text-sm">{t.nom}</p>
-                    <p className="text-xs text-gray-400">Client Richorah</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-5 italic">
+                    &ldquo;{t.texte}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF385C]/20 to-[#E02D4F]/20 flex items-center justify-center">
+                      <span className="text-sm font-bold text-[#FF385C]">
+                        {t.nom.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-[#1A1A1A] text-sm">{t.nom}</p>
+                      <p className="text-xs text-gray-400">Client Richorah</p>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-12 text-gray-400">
+                <Star className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                <p>Soyez le premier à laisser un témoignage</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
 
-      <section className="relative py-20 lg:py-24 overflow-hidden">
+      <section className="relative py-24 lg:py-28 overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80"
             alt="Luxury living room"
             fill
-            className="object-cover"
+            className="object-cover scale-105"
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
+          <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-6">
+            Contact
+          </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
             Prêt à trouver votre bien idéal ?
           </h2>
@@ -414,14 +429,14 @@ export default async function AccueilPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a href="https://wa.me/22870628696" target="_blank" rel="noopener noreferrer">
-              <Button className="bg-[#FF385C] hover:bg-[#E02D4F] gap-2 w-full sm:w-auto rounded-xl h-12 px-8 shadow-lg shadow-[#FF385C]/25">
+              <Button className="bg-[#FF385C] hover:bg-[#E02D4F] gap-2 w-full sm:w-auto rounded-xl h-12 px-8 shadow-lg shadow-[#FF385C]/25 text-base">
                 <Phone className="h-4 w-4" /> WhatsApp : 70 62 86 96
               </Button>
             </a>
             <a href="tel:+22870628696">
               <Button
                 variant="outline"
-                className="gap-2 w-full sm:w-auto border-white/20 text-white hover:bg-white/10 rounded-xl h-12 px-8"
+                className="gap-2 w-full sm:w-auto border-white/20 text-white hover:bg-white/10 rounded-xl h-12 px-8 text-base"
               >
                 <Phone className="h-4 w-4" /> Appeler : 70 62 86 96
               </Button>

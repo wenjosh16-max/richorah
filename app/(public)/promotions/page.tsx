@@ -26,18 +26,33 @@ export default async function PromotionsPage() {
   const promotions = await getActivePromotions()
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="font-serif text-3xl lg:text-4xl font-bold text-[#1A1A2E]">
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <section className="relative py-24 lg:py-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=1920&q=80"
+            alt="Promotions immobilières"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-block px-4 py-1.5 bg-[#FF385C]/20 backdrop-blur-md border border-[#FF385C]/30 rounded-full text-white text-xs tracking-widest uppercase font-medium mb-4">
+            <Percent className="h-3 w-3 inline mr-1" /> Offres spéciales
+          </div>
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
             Promotions
           </h1>
-          <p className="text-gray-600 mt-1">
-            {promotions.length > 0
-              ? `${promotions.length} promotion${promotions.length > 1 ? "s" : ""} en cours`
-              : "Aucune promotion active pour le moment"}
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+            Profitez de nos offres promotionnelles sur une sélection de biens.
           </p>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {promotions.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">

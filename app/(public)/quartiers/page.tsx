@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { formatPrix } from "@/lib/utils"
 import Link from "next/link"
+import Image from "next/image"
 import { MapPin } from "lucide-react"
 
 export const dynamic = "force-dynamic"
@@ -45,15 +46,32 @@ export default async function QuartiersPage() {
 
   return (
     <div className="bg-[#FAFAFA] min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl lg:text-3xl font-bold text-[#222]">
+      <section className="relative py-24 lg:py-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1582407947304-fd86f028f8e1?w=1920&q=80"
+            alt="Quartiers de Lomé"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-4">
+            Explorez
+          </div>
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
             Quartiers de Lomé
           </h1>
-          <p className="text-sm text-[#717171] mt-1">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
             Découvrez les prix moyens par quartier à Lomé, Togo
           </p>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {quartiers.length === 0 ? (
           <div className="text-center py-16 text-[#717171]">

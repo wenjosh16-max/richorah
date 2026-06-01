@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { envoyerMessage } from "./actions"
+import Image from "next/image"
 import {
   Phone,
   Mail,
@@ -76,13 +77,27 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F7F4]">
-      <section className="bg-[#1A1A2E] text-white py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-serif text-4xl lg:text-5xl font-bold mb-4">
+      <section className="relative py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80"
+            alt="Nous contacter"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-4">
+            Contact
+          </div>
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
             Contactez-nous
           </h1>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Une question, un projet&nbsp;? Nous sommes l&agrave; pour vous accompagner.
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+            Une question, un projet&nbsp;? Nous sommes là pour vous accompagner.
           </p>
         </div>
       </section>

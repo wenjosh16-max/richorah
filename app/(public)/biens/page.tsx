@@ -14,6 +14,7 @@ import {
   Grid3X3,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from "lucide-react"
 import FavoriteButton from "@/components/public/FavoriteButton"
 import FilterLocationField from "@/components/public/FilterLocationField"
@@ -181,43 +182,61 @@ export default async function BiensPage({ searchParams }: BiensPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="font-serif text-3xl lg:text-4xl font-bold text-[#1A1A2E]">
-              Nos biens
-            </h1>
-            <p className="text-gray-600 mt-1">
-              {total} bien{total !== 1 ? "s" : ""} trouv&eacute;
-              {total !== 1 ? "s" : ""}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href={buildUrl({ affichage: "grille" })}
-              className={`p-2 rounded-lg transition-colors ${
-                affichage === "grille"
-                  ? "bg-[#FF385C] text-white"
-                  : "bg-white text-gray-500 hover:bg-gray-100"
-              }`}
-              aria-label="Vue grille"
-            >
-              <Grid3X3 className="h-5 w-5" />
-            </Link>
-            <Link
-              href={buildUrl({ affichage: "carte" })}
-              className={`p-2 rounded-lg transition-colors ${
-                affichage === "carte"
-                  ? "bg-[#FF385C] text-white"
-                  : "bg-white text-gray-500 hover:bg-gray-100"
-              }`}
-              aria-label="Vue carte"
-            >
-              <Map className="h-5 w-5" />
-            </Link>
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <section className="relative py-20 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1920&q=80"
+            alt="Nos biens immobiliers"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/80 text-xs tracking-widest uppercase font-medium mb-3">
+                Catalogue
+              </div>
+              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white">
+                Nos biens
+              </h1>
+              <p className="text-white/60 mt-2">
+                {total} bien{total !== 1 ? "s" : ""} trouvé{total !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                href={buildUrl({ affichage: "grille" })}
+                className={`p-2.5 rounded-xl transition-all ${
+                  affichage === "grille"
+                    ? "bg-[#FF385C] text-white shadow-lg shadow-[#FF385C]/25"
+                    : "bg-white/10 backdrop-blur-md text-white/70 hover:bg-white/20"
+                }`}
+                aria-label="Vue grille"
+              >
+                <Grid3X3 className="h-5 w-5" />
+              </Link>
+              <Link
+                href={buildUrl({ affichage: "carte" })}
+                className={`p-2.5 rounded-xl transition-all ${
+                  affichage === "carte"
+                    ? "bg-[#FF385C] text-white shadow-lg shadow-[#FF385C]/25"
+                    : "bg-white/10 backdrop-blur-md text-white/70 hover:bg-white/20"
+                }`}
+                aria-label="Vue carte"
+              >
+                <Map className="h-5 w-5" />
+              </Link>
+            </div>
           </div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="w-full lg:w-72 shrink-0">
