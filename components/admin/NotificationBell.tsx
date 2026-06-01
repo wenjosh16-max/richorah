@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Bell, MessageSquare, X } from "lucide-react"
+import { useState, useEffect, useRef, useCallback } from "react"
+import { Bell, MessageSquare, BellRing, BellOff } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
@@ -18,7 +18,35 @@ export default function NotificationBell() {
   const [count, setCount] = useState(0)
   const [recent, setRecent] = useState<RecentMessage[]>([])
   const [open, setOpen] = useState(false)
+  const [notifEnabled, setNotifEnabled] = useState(false)
+  const prevCountRef = useRef(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const saved = localStorage.getItem("admin_notif_enabled")
+    if (saved === "true") setNotifEnabled(true)
+  }, [])
+
+  const requestPermission = useCallback(async () => {
+    if (!("Notification" in window)) return
+    if (Notification.permission === "granted") return true
+    if (Notification.permission === "denied") return false
+    const result = await Notification.requestPermission()
+    return result === "granted"
+  }, [])
+
+  const toggleNotif = useCallback(async () => {
+    if (!notifEnabled) {
+      const granted = await requestPermission()
+      if (granted) {
+        setNotifEnabled(true)
+        localStorage.setItem("admin_notif_enabled", "true")
+      }
+    } else {
+      setNotifEnabled(false)
+      localStorage.setItem("admin_notif_enabled", "false")
+    }
+  }, [notifEnabled, requestPermission])
 
   useEffect(() => {
     async function fetchNotifs() {
@@ -26,16 +54,31 @@ export default function NotificationBell() {
         const res = await fetch("/api/messages/count")
         if (!res.ok) return
         const data = await res.json()
-        setCount(data.count)
+        const newCount: number = data.count
+        const prevCount = prevCountRef.current
+
+        setCount(newCount)
         setRecent(data.recent)
+        prevCountRef.current = newCount
+
+        if (notifEnabled && "Notification" in window && Notification.permission === "granted") {
+          if (newCount > prevCount && prevCount > 0 && data.recent?.length > 0) {
+            const latest = data.recent[0]
+            new Notification("Nouveau message - Richorah", {
+              body: `${latest.nom}: ${latest.message.slice(0, 80)}`,
+              icon: "/favicon.ico",
+              tag: "richorah-new-message",
+            })
+          }
+        }
       } catch {
         // silencieux
       }
     }
     fetchNotifs()
-    const interval = setInterval(fetchNotifs, 30000)
+    const interval = setInterval(fetchNotifs, 15000)
     return () => clearInterval(interval)
-  }, [])
+  }, [notifEnabled])
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -82,7 +125,16 @@ export default function NotificationBell() {
             className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <p className="text-sm font-bold text-[#222]">Messages récents</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-bold text-[#222]">Messages récents</p>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleNotif() }}
+                  className={`p-1 rounded transition-colors ${notifEnabled ? "text-primary hover:bg-[#FFF0F3]" : "text-gray-400 hover:bg-gray-100"}`}
+                  title={notifEnabled ? "Désactiver les notifications" : "Activer les notifications"}
+                >
+                  {notifEnabled ? <BellRing className="h-3.5 w-3.5" /> : <BellOff className="h-3.5 w-3.5" />}
+                </button>
+              </div>
               {count > 0 && (
                 <Link
                   href="/admin/messages"

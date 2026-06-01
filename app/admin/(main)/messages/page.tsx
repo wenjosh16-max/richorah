@@ -55,6 +55,13 @@ export default function MessagesPage() {
   const [note, setNote] = useState("")
   const [loading, setLoading] = useState(true)
   const [changingId, setChangingId] = useState<string | null>(null)
+  const [adminWhatsapp, setAdminWhatsapp] = useState("")
+
+  useEffect(() => {
+    fetch("/api/contenus").then(r => r.json()).then(data => {
+      if (data.admin_whatsapp) setAdminWhatsapp(data.admin_whatsapp)
+    }).catch(() => {})
+  }, [])
 
   const fetchMessages = useCallback(async () => {
     setLoading(true)
@@ -259,6 +266,17 @@ export default function MessagesPage() {
                               >
                                 <ExternalLink className="h-4 w-4" />
                                 Voir le bien
+                              </a>
+                            )}
+                            {adminWhatsapp && (
+                              <a
+                                href={`https://wa.me/${adminWhatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Nouveau message de ${msg.nom} (${msg.telephone}) :\n\n${msg.message}${msg.bien ? `\n\nBien : ${msg.bien.titre}` : ""}`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                              >
+                                <MessageCircle className="h-4 w-4" />
+                                M&apos;avertir sur WhatsApp
                               </a>
                             )}
                           </div>

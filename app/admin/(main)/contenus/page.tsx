@@ -17,6 +17,12 @@ const SECTIONS = [
     ],
   },
   {
+    title: "Notifications",
+    fields: [
+      { key: "admin_whatsapp", label: "Numéro WhatsApp pour les alertes (format: +22890123456)", type: "text" },
+    ],
+  },
+  {
     title: "Hero",
     fields: [
       { key: "slogan_hero", label: "Slogan", type: "text" },
