@@ -1,23 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #FAFAFA;
-  --foreground: #222222;
+  --foreground: #1A1A1A;
   --primary: #FF385C;
   --primary-hover: #E02D4F;
+  --primary-light: #FFF0F3;
   --text-secondary: #717171;
   --border: #EEEEEE;
+  --gold: #C9A84C;
+  --gold-light: #F5EBD8;
+  --cream: #FFF8F3;
+  --charcoal: #1A1A1A;
+  --dark-card: #1E1E1E;
   --success: #00875A;
-  --success-bg: #E8F8F0;
   --warning: #CC8800;
-  --warning-bg: #FFF8E8;
   --danger: #FF385C;
-  --danger-bg: #FFF0F3;
-  --canvas-gray: #FAFAFA;
-  --crisp-white: #FFFFFF;
-  --charcoal: #222222;
-  --soft-coral: #FFF0F3;
 }
 
 @theme inline {
@@ -25,6 +24,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-heading: 'Playfair Display', serif;
 }
 
 * {
@@ -35,6 +36,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D1D1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 @keyframes fadeInUp {
@@ -42,6 +62,63 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.luxury-gradient {
+  background: linear-gradient(135deg, var(--charcoal) 0%, #2A2A2A 50%, var(--charcoal) 100%);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #C9A84C 0%, #F5EBD8 50%, #C9A84C 100%);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #C9A84C, #F5EBD8, #C9A84C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+.luxury-border {
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.luxury-border:hover {
+  border-color: rgba(201, 168, 76, 0.5);
 }

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Search, Building2 } from "lucide-react"
+import { Menu, X, Search, Building2, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import LocationInput from "@/components/public/LocationInput"
@@ -51,9 +51,7 @@ export default function Navbar() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ville }),
         })
-      } catch {
-        // silencieux
-      }
+      } catch {}
     }
   }
 
@@ -61,24 +59,31 @@ export default function Navbar() {
     if (e.key === "Enter") handleSearch()
   }
 
+  const isHome = pathname === "/"
+
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-sm border-b border-gray-100" : "bg-white/95 backdrop-blur-sm border-b border-gray-100/50"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled || !isHome
+          ? "bg-white/90 backdrop-blur-xl shadow-sm border-b border-gray-100/80"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Building2 className="h-4 w-4 text-white" />
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF385C] to-[#E02D4F] flex items-center justify-center shadow-md shadow-[#FF385C]/20 group-hover:shadow-lg group-hover:shadow-[#FF385C]/30 transition-all">
+              <Building2 className="h-4.5 w-4.5 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-[#222]">
+            <span className={`text-lg font-bold tracking-tight transition-colors ${scrolled || !isHome ? "text-[#222]" : "text-white"}`}>
               richorah
+            </span>
+            <span className={`hidden sm:inline text-[10px] font-medium tracking-widest uppercase ml-1 transition-colors ${scrolled || !isHome ? "text-[#717171]" : "text-white/50"}`}>
+              Immobilier
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-8">
             {NAV_LINKS.map((link) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
               return (
@@ -86,32 +91,44 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "text-sm font-medium transition-colors",
-                    isActive ? "text-primary" : "text-[#717171] hover:text-[#222]"
+                    "text-sm font-medium transition-all duration-200 relative py-1",
+                    isActive
+                      ? scrolled || !isHome ? "text-primary" : "text-white"
+                      : scrolled || !isHome ? "text-[#717171] hover:text-[#222]" : "text-white/70 hover:text-white"
                   )}
                 >
                   {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#FF385C] rounded-full"
+                    />
+                  )}
                 </Link>
               )
             })}
           </div>
 
           <div className="hidden lg:flex items-center gap-3">
-            <div className="flex items-center bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-shadow divide-x divide-gray-100">
-              <div className="relative px-2 py-2.5 min-w-[140px]">
+            <div className={`flex items-center rounded-full shadow-sm transition-all duration-300 divide-x ${
+              scrolled || !isHome
+                ? "bg-white border border-gray-200 hover:shadow-md"
+                : "bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20"
+            }`}>
+              <div className="relative px-3 py-2.5 min-w-[140px]">
                 <LocationInput
                   value={ville}
                   onChange={setVille}
                   onKeyDown={handleKeyDown}
                   placeholder="Où ?"
-                  className="text-sm font-medium text-[#222] outline-none bg-transparent w-full placeholder:text-gray-400"
+                  className={`text-sm font-medium outline-none bg-transparent w-full placeholder:text-gray-400 ${scrolled || !isHome ? "text-[#222]" : "text-white placeholder:text-white/50"}`}
                 />
               </div>
               <div className="relative px-4 py-2.5">
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  className="text-sm text-gray-500 outline-none bg-transparent w-24 appearance-none cursor-pointer"
+                  className={`text-sm outline-none bg-transparent w-20 appearance-none cursor-pointer ${scrolled || !isHome ? "text-gray-500" : "text-white/70"}`}
                 >
                   <option value="">Type</option>
                   <option value="vente">Vente</option>
@@ -125,12 +142,12 @@ export default function Navbar() {
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="text-sm text-gray-500 outline-none bg-transparent w-24 placeholder:text-gray-400"
+                  className={`text-sm outline-none bg-transparent w-20 placeholder:text-gray-400 ${scrolled || !isHome ? "text-gray-500" : "text-white/70 placeholder:text-white/50"}`}
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="m-1.5 w-9 h-9 rounded-full bg-primary hover:bg-[#E02D4F] flex items-center justify-center text-white transition-colors flex-shrink-0"
+                className="m-1.5 w-9 h-9 rounded-full bg-[#FF385C] hover:bg-[#E02D4F] flex items-center justify-center text-white transition-colors flex-shrink-0 shadow-sm"
               >
                 <Search className="h-4 w-4" />
               </button>
@@ -140,14 +157,14 @@ export default function Navbar() {
           <div className="lg:hidden flex items-center gap-2">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-[#222]"
+              className={`p-2 transition-colors ${scrolled || !isHome ? "text-[#222]" : "text-white"}`}
               aria-label="Rechercher"
             >
               <Search className="h-5 w-5" />
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 text-[#222]"
+              className={`p-2 transition-colors ${scrolled || !isHome ? "text-[#222]" : "text-white"}`}
               aria-label="Menu"
             >
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -199,7 +216,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white shadow-lg overflow-hidden border-t border-gray-100"
+            className="lg:hidden bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden border-t border-gray-100"
           >
             <div className="px-4 py-4 space-y-1">
               {NAV_LINKS.map((link) => {
