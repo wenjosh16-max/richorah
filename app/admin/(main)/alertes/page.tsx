@@ -43,11 +43,23 @@ export default function AlertesPage() {
 
   const handleSendEmail = async (alerte: AlerteItem) => {
     setSendingId(alerte.id)
-    // Placeholder - just log it
-    console.log("Envoi d'email à", alerte.email, "pour une alerte", alerte.type, "à", alerte.ville)
-    await new Promise((r) => setTimeout(r, 500))
-    toast({ title: "Email envoyé (simulation)", description: `Notification à ${alerte.email}` })
-    setSendingId(null)
+    try {
+      const res = await fetch("/api/alertes/envoyer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ alerteId: alerte.id }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        toast({ title: "Email envoyé", description: data.message })
+      } else {
+        toast({ title: "Erreur", description: data.error || "Échec de l'envoi", variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Erreur", description: "Impossible d'envoyer l'email", variant: "destructive" })
+    } finally {
+      setSendingId(null)
+    }
   }
 
   if (loading) {

@@ -308,6 +308,70 @@ async function main() {
 
     console.log("Journal entries created")
   }
+  const existingParametres = await prisma.parametre.count()
+  if (existingParametres === 0) {
+    await prisma.parametre.createMany({
+      data: [
+        { cle: "commission_vente_pct", valeur: "5", type: "nombre" },
+        { cle: "commission_location_mois", valeur: "1", type: "nombre" },
+        { cle: "commission_part_agence", valeur: "50", type: "nombre" },
+        { cle: "commission_part_agent", valeur: "50", type: "nombre" },
+        { cle: "frais_visite_defaut", valeur: "5000", type: "nombre" },
+        { cle: "frais_visite_circuit", valeur: "15000", type: "nombre" },
+        { cle: "telephone_standard", valeur: "70 62 86 96", type: "string" },
+        { cle: "telephone_whatsapp", valeur: "22870628696", type: "string" },
+        { cle: "telephone_standard_2", valeur: "97 55 55 82", type: "string" },
+        { cle: "email_notification", valeur: "contact@richorah-immobilier.com", type: "string" },
+      ],
+    })
+    console.log("Paramètres créés")
+  } else {
+    console.log("Paramètres skipped (already exist)")
+  }
+
+  await prisma.parametre.upsert({
+    where: { cle: "visite_creneaux" },
+    update: {
+      valeur: JSON.stringify({
+        lundi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        mardi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        mercredi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        jeudi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        vendredi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        samedi: ["9:00", "10:00", "11:00"],
+        dimanche: [],
+      }),
+      type: "string",
+    },
+    create: {
+      cle: "visite_creneaux",
+      valeur: JSON.stringify({
+        lundi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        mardi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        mercredi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        jeudi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        vendredi: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+        samedi: ["9:00", "10:00", "11:00"],
+        dimanche: [],
+      }),
+      type: "string",
+    },
+  })
+  console.log("Créneaux visite ajoutés")
+
+  const existingAgents = await prisma.agent.count()
+  if (existingAgents === 0) {
+    await prisma.agent.createMany({
+      data: [
+        { nom: "Koffi A.", telephone: "90 11 22 33", email: "koffi@richorah.com", quartiers: ["Tokoin", "Kégué", "Adidogomé"], commissionPct: null, ordre: 1 },
+        { nom: "Ama B.", telephone: "70 44 55 66", email: "ama@richorah.com", quartiers: ["Bénin", "Lomé 2", "Nyékonakpoé"], commissionPct: null, ordre: 2 },
+      ],
+    })
+    console.log("Agents créés")
+  } else {
+    console.log("Agents skipped (already exist)")
+  }
+
   console.log("Seed completed successfully!")
 }
 

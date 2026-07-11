@@ -1,5 +1,40 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { prisma } from "./prisma"
+
+export const TELEPHONE_STANDARD = "70 62 86 96"
+export const TELEPHONE_STANDARD_2 = "97 55 55 82"
+export const TELEPHONE_WHATSAPP = "22870628696"
+export const EMAIL_CONTACT = "contact@richorah-immobilier.com"
+export const EMAIL_NOTIFICATION = "Richorahimmobilier04@gmail.com"
+
+let configCache: Record<string, string> | null = null
+
+export async function getConfig(): Promise<Record<string, string>> {
+  if (configCache) return configCache
+  try {
+    const params = await prisma.parametre.findMany()
+    const obj: Record<string, string> = {}
+    for (const p of params) obj[p.cle] = p.valeur
+    configCache = obj
+    return obj
+  } catch {
+    return {}
+  }
+}
+
+export async function getTelephone(key: "standard" | "whatsapp" | "standard_2"): Promise<string> {
+  const config = await getConfig()
+  if (key === "standard") return config["telephone_standard"] || TELEPHONE_STANDARD
+  if (key === "whatsapp") return config["telephone_whatsapp"] || TELEPHONE_WHATSAPP
+  return config["telephone_standard_2"] || TELEPHONE_STANDARD_2
+}
+
+export function getTelephoneSync(key: "standard" | "whatsapp" | "standard_2"): string {
+  if (key === "standard") return TELEPHONE_STANDARD
+  if (key === "whatsapp") return TELEPHONE_WHATSAPP
+  return TELEPHONE_STANDARD_2
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

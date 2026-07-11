@@ -18,6 +18,10 @@ import {
   X,
   Star,
   MapPin,
+  Settings,
+  Users,
+  Eye,
+  DollarSign,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
@@ -25,8 +29,12 @@ import { useState } from "react"
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Biens", href: "/admin/biens", icon: Building2 },
+  { name: "Agents", href: "/admin/agents", icon: Users },
+  { name: "Visites", href: "/admin/visites", icon: Eye },
+  { name: "Transactions", href: "/admin/transactions", icon: DollarSign },
   { name: "Messages", href: "/admin/messages", icon: MessageSquare },
   { name: "Promotions", href: "/admin/promotions", icon: Megaphone },
+  { name: "Paramètres", href: "/admin/parametres", icon: Settings },
   { name: "Contenus", href: "/admin/contenus", icon: FileText },
   { name: "Témoignages", href: "/admin/temoignages", icon: Star },
   { name: "Quartiers", href: "/admin/quartiers", icon: MapPin },

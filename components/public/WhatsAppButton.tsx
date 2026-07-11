@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { MessageCircle, X, Send } from "lucide-react"
 
@@ -16,9 +16,16 @@ export default function WhatsAppButton({ message }: { message?: string }) {
   const [nom, setNom] = useState("")
   const [telephone, setTelephone] = useState("")
   const [msg, setMsg] = useState("")
+  const [waNum, setWaNum] = useState("22870628696")
+
+  useEffect(() => {
+    fetch("/api/parametres").then(r => r.json()).then(d => {
+      if (d.telephone_whatsapp) setWaNum(d.telephone_whatsapp)
+    }).catch(() => {})
+  }, [])
 
   const waUrl = (text: string) =>
-    `https://wa.me/22870628696?text=${encodeURIComponent(text)}`
+    `https://wa.me/${waNum}?text=${encodeURIComponent(text)}`
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

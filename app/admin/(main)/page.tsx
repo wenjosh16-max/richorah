@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import type { ComponentType } from "react"
 import { formatDate, formatPrix } from "@/lib/utils"
 import Link from "next/link"
 import {
@@ -7,13 +8,17 @@ import {
   MessageCircle,
   AlertCircle,
   DollarSign,
-  TrendingUp,
+  Eye,
+  Users,
+  UserCheck,
 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const now = new Date()
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
   const [
     biensActifs,
@@ -23,49 +28,63 @@ export default async function DashboardPage() {
     biensARenover,
     messagesRecents,
     biensData,
+    visitesEnAttente,
+    visitesAujourdhui,
+    commissionsData,
+    topAgents,
+    paiementsVisites,
+    totalFraisPerçus,
+    totalFraisAttente,
   ] = await Promise.all([
     prisma.bien.count({ where: { statut: "actif", published: true } }),
-    prisma.bien.count({
-      where: { statut: { in: ["vendu", "loué"] } },
-    }),
+    prisma.bien.count({ where: { statut: { in: ["vendu", "loué"] } } }),
     prisma.message.count({ where: { statut: "nouveau" } }),
     prisma.alerteBien.count(),
     prisma.bien.findMany({
-      where: {
-        updatedAt: { lt: thirtyDaysAgo },
-        published: true,
-        statut: "actif",
-      },
-      orderBy: { updatedAt: "asc" },
-      take: 5,
+      where: { updatedAt: { lt: thirtyDaysAgo }, published: true, statut: "actif" },
+      orderBy: { updatedAt: "asc" }, take: 5,
       select: { id: true, titre: true, slug: true, updatedAt: true },
     }),
     prisma.message.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        nom: true,
-        telephone: true,
-        message: true,
-        statut: true,
-        createdAt: true,
-        bienId: true,
-      },
+      orderBy: { createdAt: "desc" }, take: 5,
+      select: { id: true, nom: true, telephone: true, message: true, statut: true, createdAt: true, bienId: true },
     }),
     prisma.bien.findMany({
       where: { published: true },
-      select: {
-        id: true,
-        titre: true,
-        prix: true,
-        type: true,
-        statut: true,
-        createdAt: true,
-        superficie: true,
-      },
+      select: { id: true, titre: true, prix: true, type: true, statut: true, createdAt: true, superficie: true },
+    }),
+    prisma.visite.count({ where: { statut: { in: ["demandee", "confirmee", "agent_part", "arrive"] } } }),
+    prisma.visite.count({
+      where: { statut: { not: "annulee" }, createdAt: { gte: new Date(now.setHours(0, 0, 0, 0)) } },
+    }),
+    prisma.transaction.findMany({
+      where: { dateEncaissement: { gte: firstOfMonth } },
+      select: { commissionTotal: true, statut: true, partAgence: true, partAgent: true },
+    }),
+    prisma.agent.findMany({
+      orderBy: { transactions: { _count: "desc" } }, take: 5,
+      include: { _count: { select: { transactions: true, visites: true } } },
+    }),
+    prisma.visite.count({
+      where: { statutPaiement: "paye", frais: { gt: 0 }, createdAt: { gte: firstOfMonth } },
+    }),
+    prisma.visite.aggregate({
+      where: { statutPaiement: "paye", frais: { gt: 0 }, createdAt: { gte: firstOfMonth } },
+      _sum: { frais: true },
+    }),
+    prisma.visite.aggregate({
+      where: { statutPaiement: "en_attente", frais: { gt: 0 }, createdAt: { gte: firstOfMonth } },
+      _sum: { frais: true },
     }),
   ])
+
+  const commissionTotalMois = commissionsData.reduce((s, t) => s + t.commissionTotal, 0)
+  const commissionEncaissée = commissionsData
+    .filter((t) => t.statut === "commission_payee")
+    .reduce((s, t) => s + t.partAgence, 0)
+  const commissionAttendue = commissionsData
+    .filter((t) => t.statut !== "commission_payee")
+    .reduce((s, t) => s + t.partAgence, 0)
 
   const biensRecents = await prisma.bien.findMany({
     where: { published: true },
@@ -151,21 +170,23 @@ export default async function DashboardPage() {
           highlight
         />
         <MetricCard
-          label="Vendus / Loués"
-          value={biensVendusLoues}
+          label="Visites en attente"
+          value={visitesEnAttente}
+          icon={Eye}
         />
         <MetricCard
           label="Messages non lus"
           value={messagesNonLus}
-          highlight
+          icon={MessageCircle}
         />
         <MetricCard
-          label="Alertes inscrites"
-          value={alertesCount}
+          label="Vendus / Loués"
+          value={biensVendusLoues}
+          icon={Building2}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign className="h-4 w-4 text-primary" />
@@ -205,31 +226,111 @@ export default async function DashboardPage() {
 
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-[#222]">Performance des biens</h3>
+            <DollarSign className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-bold text-[#222]">Commissions du mois</h3>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-[#FAFAFA] rounded-lg">
-              <div className="text-2xl font-bold text-primary">{biensVendusLoues}</div>
-              <p className="text-[10px] text-[#717171] mt-0.5">Transactions</p>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Total</p>
+              <p className="text-lg font-bold text-[#222] mt-1">{formatPrix(commissionTotalMois)}</p>
             </div>
-            <div className="text-center p-4 bg-[#FAFAFA] rounded-lg">
-              <div className="text-2xl font-bold text-[#222]">
-                {biensActifs > 0
-                  ? Math.round((biensVendusLoues / (biensActifs + biensVendusLoues)) * 100)
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Encaissé</p>
+              <p className="text-lg font-bold text-[#00875A] mt-1">{formatPrix(commissionEncaissée)}</p>
+            </div>
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">En attente</p>
+              <p className="text-lg font-bold text-amber-600 mt-1">{formatPrix(commissionAttendue)}</p>
+            </div>
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Taux encaissement</p>
+              <p className="text-lg font-bold text-[#222] mt-1">
+                {commissionTotalMois > 0
+                  ? Math.round((commissionEncaissée / commissionTotalMois) * 100)
                   : 0}%
-              </div>
-              <p className="text-[10px] text-[#717171] mt-0.5">Taux de conversion</p>
-            </div>
-            <div className="text-center p-4 bg-[#FAFAFA] rounded-lg">
-              <div className="text-2xl font-bold text-[#222]">{messagesNonLus}</div>
-              <p className="text-[10px] text-[#717171] mt-0.5">Leads non traités</p>
-            </div>
-            <div className="text-center p-4 bg-[#FAFAFA] rounded-lg">
-              <div className="text-2xl font-bold text-[#00875A]">{alertesCount}</div>
-              <p className="text-[10px] text-[#717171] mt-0.5">Alertes actives</p>
+              </p>
             </div>
           </div>
+          <Link
+            href="/admin/transactions"
+            className="text-xs font-medium text-primary hover:text-[#E02D4F] transition-colors"
+          >
+            Gérer les transactions &rarr;
+          </Link>
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Eye className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-bold text-[#222]">Revenus visites du mois</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Payé</p>
+              <p className="text-lg font-bold text-green-600 mt-1">{formatPrix(totalFraisPerçus._sum.frais || 0)}</p>
+              <p className="text-[10px] text-[#717171]">{paiementsVisites} visite{paiementsVisites > 1 ? "s" : ""} payée{paiementsVisites > 1 ? "s" : ""}</p>
+            </div>
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">En attente</p>
+              <p className="text-lg font-bold text-amber-600 mt-1">{formatPrix(totalFraisAttente._sum.frais || 0)}</p>
+              <p className="text-[10px] text-[#717171]">frais non encore perçus</p>
+            </div>
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Taux encaissement</p>
+              <p className="text-lg font-bold text-[#222] mt-1">
+                {((totalFraisPerçus._sum.frais || 0) + (totalFraisAttente._sum.frais || 0)) > 0
+                  ? Math.round(((totalFraisPerçus._sum.frais || 0) / ((totalFraisPerçus._sum.frais || 0) + (totalFraisAttente._sum.frais || 0))) * 100)
+                  : 0}%
+              </p>
+            </div>
+            <div className="bg-[#FAFAFA] rounded-lg p-3">
+              <p className="text-[10px] text-[#717171] font-medium uppercase tracking-wider">Visites ce mois</p>
+              <p className="text-lg font-bold text-[#222] mt-1">{visitesEnAttente + paiementsVisites}</p>
+            </div>
+          </div>
+          <Link
+            href="/admin/visites"
+            className="text-xs font-medium text-primary hover:text-[#E02D4F] transition-colors"
+          >
+            Gérer les visites &rarr;
+          </Link>
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Users className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-bold text-[#222]">Top agents</h3>
+          </div>
+          {topAgents.length === 0 ? (
+            <p className="text-sm text-[#717171]">Aucun agent</p>
+          ) : (
+            <div className="space-y-3">
+              {topAgents.map((agent, i) => (
+                <div
+                  key={agent.id}
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#FAFAFA] transition-colors"
+                >
+                  <span className="text-xs font-bold text-[#717171] w-5">#{i + 1}</span>
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                    {agent.nom.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#222] truncate">{agent.nom}</p>
+                    <p className="text-[10px] text-[#717171]">
+                      {agent._count.transactions} trans. · {agent._count.visites} visites
+                    </p>
+                  </div>
+                  <UserCheck className="h-4 w-4 text-green-500" />
+                </div>
+              ))}
+              <Link
+                href="/admin/agents"
+                className="block text-xs font-medium text-primary hover:text-[#E02D4F] transition-colors text-center pt-2"
+              >
+                Voir tous les agents &rarr;
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -368,17 +469,22 @@ function MetricCard({
   label,
   value,
   highlight = false,
+  icon: Icon,
 }: {
   label: string
   value: number
   highlight?: boolean
+  icon?: ComponentType<{ className?: string }>
 }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-5 transition-shadow hover:shadow-sm">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-sm text-[#717171]">{label}</p>
+        {Icon && <Icon className="h-4 w-4 text-gray-400" />}
+      </div>
       <p className="text-2xl font-bold" style={{ color: highlight ? "#FF385C" : "#222" }}>
         {value.toLocaleString("fr-FR")}
       </p>
-      <p className="text-sm text-[#717171] mt-1">{label}</p>
     </div>
   )
 }

@@ -101,3 +101,64 @@ export interface FiltresRecherche {
   tri?: string
   page?: number
 }
+
+export interface VisiteData {
+  id: string
+  codeUnique: string
+  bienId: string
+  bien?: BienData | null
+  agentId?: string | null
+  agent?: AgentData | null
+  nomClient: string
+  telClient: string
+  emailClient?: string | null
+  message?: string | null
+  creneau: string
+  statut: string
+  frais?: number | null
+  modePaiement?: string | null
+  statutPaiement: string
+  circuitIds: string[]
+  note?: number | null
+  commentaire?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface AgentData {
+  id: string
+  nom: string
+  telephone: string
+  email?: string | null
+  photo?: string | null
+  quartiers: string[]
+  commissionPct?: number | null
+  actif: boolean
+  ordre: number
+  createdAt: Date | string
+  _count?: { visites: number; transactions: number }
+}
+
+export interface TransactionData {
+  id: string
+  bienId: string
+  bien?: BienData | null
+  agentId?: string | null
+  agent?: AgentData | null
+  type: string
+  montantTotal: number
+  commissionTotal: number
+  partAgence: number
+  partAgent: number
+  statut: string
+  dateSignature?: Date | string | null
+  dateEncaissement?: Date | string | null
+  notes?: string | null
+  createdAt: Date | string
+}
+
+export interface ParametreData {
+  cle: string
+  valeur: string
+  type: string
+}

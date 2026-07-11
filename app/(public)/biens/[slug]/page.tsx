@@ -22,7 +22,7 @@ import {
   Download,
 } from "lucide-react"
 import FavoriteButton from "@/components/public/FavoriteButton"
-import SimulateurCredit from "@/components/public/SimulateurCredit"
+import DemandeVisiteForm from "@/components/public/DemandeVisiteForm"
 import ClientPhotoGallery from "./ClientPhotoGallery"
 import ClientShareButton from "./ClientShareButton"
 import ContactForm from "./ContactForm"
@@ -419,9 +419,7 @@ export default async function DetailBienPage({ params }: DetailBienPageProps) {
 
           <div className="space-y-6">
             <div className="lg:sticky lg:top-24 space-y-6">
-              {bien.prix && (
-                <SimulateurCredit prix={bien.prix} />
-              )}
+              <DemandeVisiteForm bienId={bien.id} bienTitre={bien.titre} />
             </div>
           </div>
         </div>

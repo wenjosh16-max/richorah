@@ -1,8 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { MessageSquare, X, Send, Check, MessageCircle } from "lucide-react"
+import { MessageSquare, X, Send, Check, MessageCircle, Home } from "lucide-react"
+
+interface BienOption {
+  id: string
+  titre: string
+}
 
 const QUICK_MESSAGES = [
   { label: "Bonjour, je cherche un bien", msg: "Bonjour, je suis intéressé par vos biens immobiliers. Pouvez-vous me contacter ?" },
@@ -16,9 +21,27 @@ export default function FloatingMessageButton() {
   const [nom, setNom] = useState("")
   const [telephone, setTelephone] = useState("")
   const [message, setMessage] = useState("")
+  const [bienId, setBienId] = useState("")
+  const [biens, setBiens] = useState<BienOption[]>([])
   const [sending, setSending] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
+  const [config, setConfig] = useState({ telephone_whatsapp: "22870628696" })
+
+  useEffect(() => {
+    fetch("/api/biens")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setBiens(data)
+      })
+      .catch(() => {})
+    fetch("/api/parametres")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.telephone_whatsapp) setConfig({ telephone_whatsapp: d.telephone_whatsapp })
+      })
+      .catch(() => {})
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -31,19 +54,22 @@ export default function FloatingMessageButton() {
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom: nom.trim(), telephone: telephone.trim(), message: message.trim() }),
+        body: JSON.stringify({
+          nom: nom.trim(),
+          telephone: telephone.trim(),
+          message: message.trim(),
+          bienId: bienId || null,
+        }),
       })
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(text || "Erreur serveur")
-      }
+      if (!res.ok) throw new Error("Erreur serveur")
       setSuccess(true)
       setNom("")
       setTelephone("")
       setMessage("")
+      setBienId("")
       setTimeout(() => { setSuccess(false); setOpen(false) }, 2000)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur. Veuillez réessayer.")
+    } catch {
+      setError("Erreur. Veuillez réessayer.")
     } finally {
       setSending(false)
     }
@@ -56,7 +82,7 @@ export default function FloatingMessageButton() {
   }
 
   const waUrl = (text: string) =>
-    `https://wa.me/22870628696?text=${encodeURIComponent(text)}`
+    `https://wa.me/${config.telephone_whatsapp}?text=${encodeURIComponent(text)}`
 
   return (
     <>
@@ -113,6 +139,16 @@ export default function FloatingMessageButton() {
                   onChange={(e) => setTelephone(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
                 />
+                <select
+                  value={bienId}
+                  onChange={(e) => setBienId(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary bg-white"
+                >
+                  <option value="">Sélectionner un bien (optionnel)</option>
+                  {biens.map((b) => (
+                    <option key={b.id} value={b.id}>{b.titre}</option>
+                  ))}
+                </select>
                 <textarea
                   placeholder="Votre message..."
                   rows={3}

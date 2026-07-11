@@ -37,6 +37,8 @@ model Bien {
   updatedAt      DateTime        @updatedAt
   messages       Message[]
   promotions     PromotionBien[]
+  visites        Visite[]
+  transactions   Transaction[]
 }
 
 model Promotion {
@@ -124,4 +126,69 @@ model Admin {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+}
+
+model Agent {
+  id            String        @id @default(uuid())
+  nom           String
+  telephone     String
+  email         String?
+  photo         String?
+  quartiers     String[]
+  commissionPct Float?
+  actif         Boolean       @default(true)
+  ordre         Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  visites       Visite[]
+  transactions  Transaction[]
+}
+
+model Visite {
+  id            String    @id @default(uuid())
+  codeUnique    String    @unique
+  bienId        String
+  bien          Bien      @relation(fields: [bienId], references: [id], onDelete: Cascade)
+  agentId       String?
+  agent         Agent?    @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  nomClient     String
+  telClient     String
+  emailClient   String?
+  message       String?   @db.Text
+  creneau       String    @default("matin") // "matin" ou "apres-midi"
+  statut        String    @default("demandee")
+  frais         Float?
+  modePaiement  String?   // "especes", "flooz", "tmoney", "wave"
+  statutPaiement String   @default("en_attente") // "en_attente", "paye"
+  circuitIds    String[]  // IDs des biens pour circuit groupé
+  note          Int?      // 1-5 après visite
+  commentaire   String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Transaction {
+  id               String    @id @default(uuid())
+  bienId           String
+  bien             Bien      @relation(fields: [bienId], references: [id], onDelete: Cascade)
+  agentId          String?
+  agent            Agent?    @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  type             String    // "vente" ou "location"
+  montantTotal     Float
+  commissionTotal  Float
+  partAgence       Float
+  partAgent        Float
+  statut           String    @default("negociation")
+  dateSignature    DateTime?
+  dateEncaissement DateTime?
+  notes            String?   @db.Text
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Parametre {
+  cle       String   @id
+  valeur    String   @db.Text
+  type      String   @default("string")
+  updatedAt DateTime @updatedAt
 }
