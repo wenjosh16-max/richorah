@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma"
 import type { ComponentType } from "react"
 import { formatDate, formatPrix } from "@/lib/utils"
 import Link from "next/link"
+import { Suspense } from "react"
+import DashboardCharts from "@/components/admin/DashboardCharts"
 import {
   Building2,
   Phone,
@@ -119,6 +121,61 @@ export default async function DashboardPage() {
   const maxType = Math.max(...typeLabels.map((t) => t.value), 1)
 
   const stalenessCount = biensARenover.length
+
+  const trenteJours = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const visitesParJour = await prisma.visite.groupBy({
+    by: ["createdAt"],
+    where: { createdAt: { gte: trenteJours }, statut: { not: "annulee" } },
+    _count: { id: true },
+  })
+  const visitesChartData = Array.from({ length: 30 }, (_, i) => {
+    const d = new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000)
+    const key = d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" })
+    const count = visitesParJour.filter((v) => {
+      const vd = new Date(v.createdAt)
+      return vd.getDate() === d.getDate() && vd.getMonth() === d.getMonth() && vd.getFullYear() === d.getFullYear()
+    }).reduce((sum, v) => sum + v._count.id, 0)
+    return { date: key, count }
+  })
+
+  const totalVisitesMois = await prisma.visite.count({
+    where: { createdAt: { gte: firstOfMonth }, statut: { not: "annulee" } },
+  })
+  const paiementsVisitesData = [
+    { name: "Payé", value: paiementsVisites, color: "#00875A" },
+    { name: "En attente", value: Math.max(0, totalVisitesMois - paiementsVisites), color: "#F59E0B" },
+  ]
+
+  const semaines = 4
+  const visitesRevenus = await prisma.visite.findMany({
+    where: { createdAt: { gte: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000) }, statut: { not: "annulee" } },
+    select: { frais: true, statutPaiement: true, createdAt: true },
+  })
+  const revenusData = Array.from({ length: semaines }, (_, i) => {
+    const debut = new Date(Date.now() - (semaines - 1 - i) * 7 * 24 * 60 * 60 * 1000)
+    const fin = new Date(debut.getTime() + 7 * 24 * 60 * 60 * 1000)
+    const semaineVisites = visitesRevenus.filter((v) => {
+      const d = new Date(v.createdAt)
+      return d >= debut && d < fin
+    })
+    const recettes = semaineVisites.filter((v) => v.statutPaiement === "paye").reduce((s, v) => s + (v.frais || 0), 0)
+    const depenses = semaineVisites.filter((v) => v.statutPaiement !== "paye").reduce((s, v) => s + (v.frais || 0), 0)
+    return { week: `S${i + 1}`, recettes: Math.round(recettes), depenses: Math.round(depenses) }
+  })
+
+  const topBiens = await prisma.visite.groupBy({
+    by: ["bienId"],
+    where: { createdAt: { gte: trenteJours } },
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: 5,
+  })
+  const topBiensData = await Promise.all(
+    topBiens.map(async (v) => {
+      const bien = await prisma.bien.findUnique({ where: { id: v.bienId }, select: { titre: true } })
+      return { nom: bien?.titre || "Inconnu", visites: v._count.id }
+    })
+  )
 
   function getInitials(name: string): string {
     return name
@@ -460,6 +517,17 @@ export default async function DashboardPage() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="pt-2">
+        <Suspense fallback={<div className="h-64 bg-gray-50 rounded-2xl animate-pulse" />}>
+          <DashboardCharts
+            visitesData={visitesChartData}
+            paiementsData={paiementsVisitesData}
+            revenusData={revenusData}
+            topBiensData={topBiensData}
+          />
+        </Suspense>
       </div>
     </div>
   )
