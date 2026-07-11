@@ -492,7 +492,7 @@ export default async function BiensPage({ searchParams }: BiensPageProps) {
 
                         <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
                           <MapPin className="h-3.5 w-3.5 shrink-0" />
-                          <span>{bien.ville || "Lom&eacute;"}</span>
+                          <span>{bien.ville || "Lomé"}{bien.quartier ? `, ${bien.quartier}` : ""}</span>
                         </div>
 
                         <div className="mt-3">

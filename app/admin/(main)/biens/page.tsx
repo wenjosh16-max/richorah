@@ -96,6 +96,7 @@ export default async function BiensPage({
 
         <form className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          {filter !== "tous" && <input type="hidden" name="filtre" value={filter} />}
           <Input
             name="recherche"
             defaultValue={search}

@@ -25,6 +25,8 @@ export default function NouveauBienPage() {
     titre: "",
     type: "vente",
     prix: "",
+    prixNegociable: false,
+    prixSurDemande: false,
     prixPeriode: "",
     prixTexte: "",
     ville: "",
@@ -37,7 +39,7 @@ export default function NouveauBienPage() {
     equipements: [] as string[],
   })
 
-  const update = (field: string, value: string | string[]) =>
+  const update = (field: string, value: string | string[] | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }))
 
   const fileToBase64 = (file: File): Promise<string> =>
@@ -87,6 +89,8 @@ export default function NouveauBienPage() {
         titre: form.titre,
         type: form.type,
         prix: form.prix ? parseFloat(form.prix) : undefined,
+        prixNegociable: form.prixNegociable,
+        prixSurDemande: form.prixSurDemande,
         prixPeriode: form.prixPeriode || undefined,
         prixTexte: form.prixTexte || undefined,
         ville: form.ville,
@@ -183,6 +187,20 @@ export default function NouveauBienPage() {
           <div>
             <Label>Prix (FCFA)</Label>
             <Input type="number" value={form.prix} onChange={(e) => update("prix", e.target.value)} placeholder="50 000 000" />
+          </div>
+          <div className="flex items-end gap-4">
+            <label className="flex items-center gap-2 cursor-pointer pb-2">
+              <input type="checkbox" checked={form.prixNegociable}
+                onChange={(e) => update("prixNegociable", e.target.checked)}
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
+              <span className="text-sm text-gray-700">Négociable</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer pb-2">
+              <input type="checkbox" checked={form.prixSurDemande}
+                onChange={(e) => update("prixSurDemande", e.target.checked)}
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
+              <span className="text-sm text-gray-700">Prix sur demande</span>
+            </label>
           </div>
           <div>
             <Label>Période du prix</Label>

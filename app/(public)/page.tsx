@@ -213,7 +213,7 @@ export default async function AccueilPage() {
                         <span className="text-xs text-gray-300">·</span>
                         <div className="flex items-center gap-1 text-sm text-gray-500">
                           <MapPin className="h-3 w-3" />
-                          <span>{bien.ville || "Lomé"}</span>
+                          <span>{bien.ville || "Lomé"}{bien.quartier ? `, ${bien.quartier}` : ""}</span>
                         </div>
                       </div>
 

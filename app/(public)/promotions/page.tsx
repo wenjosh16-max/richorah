@@ -150,7 +150,7 @@ export default async function PromotionsPage() {
                               </h4>
                               <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
                                 <MapPin className="h-3 w-3" />
-                                <span>{bien.ville || "Lomé"}</span>
+                                <span>{bien.ville || "Lomé"}{bien.quartier ? `, ${bien.quartier}` : ""}</span>
                                 {bien.quartier && <span>, {bien.quartier}</span>}
                               </div>
                               <div className="mt-2">
